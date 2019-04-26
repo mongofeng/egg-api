@@ -20,7 +20,22 @@ module.exports = appInfo => {
 
   // add your user config here
   const userConfig = {
-    // myAppName: 'egg',
+    myAppName: 'egg-api',
+
+    // 加载 errorHandler 中间件
+    middleware: [ 'errorHandler' ],
+
+    // 只对 /api 前缀的 url 路径生效
+    errorHandler: {
+      match: '/api',
+    },
+
+    security: {
+      csrf: {
+        // 判断是否需要 ignore 的方法，请求上下文 context 作为第一个参数
+        enable: false,
+      },
+    },
   };
 
   return {

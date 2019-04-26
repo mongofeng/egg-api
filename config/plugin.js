@@ -6,4 +6,10 @@ module.exports = {
   // static: {
   //   enable: true,
   // }
+
+  // 开启 validate 插件
+  validate: {
+    enable: true,
+    package: 'egg-validate',
+  },
 };
