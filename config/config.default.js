@@ -57,6 +57,14 @@ module.exports = appInfo => {
       origin: '*',
       allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
     },
+
+    // 更换端口
+    cluster: {
+      listen: {
+        port: 3330,
+        hostname: '0.0.0.0',
+      },
+    },
   };
 
   return {
