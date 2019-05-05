@@ -12,7 +12,8 @@ const createRule = {
 class TopicController extends Controller {
   async index() {
     const { ctx } = this;
-    ctx.body = 'hi, egg2222';
+    console.log(ctx.locals);
+    ctx.body = ctx.locals.userId;
   }
 
   async create() {

@@ -23,7 +23,7 @@ module.exports = appInfo => {
     myAppName: 'egg-api',
 
     // 加载 errorHandler 中间件
-    middleware: [ 'errorHandler' ],
+    middleware: [ 'errorHandler', 'jwt' ],
 
     // 只对 /api 前缀的 url 路径生效
     errorHandler: {
