@@ -1,7 +1,6 @@
 'use strict';
 
 const Controller = require('egg').Controller;
-const uuidv1 = require('uuid/v1');
 // 定义创建接口的请求参数规则
 const loginRule = {
   account: 'string',
