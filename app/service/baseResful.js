@@ -59,9 +59,9 @@ class BaseResfulService extends Service {
   /**
    * 获取详情
    * @param {*} Document_Model 字段表model
-   * @param {*} param1 id
+   * @param {*} props id
    */
-  async detail(Document_Model, { props = '_id' }) {
+  async detail(Document_Model, props = '_id') {
     const { ctx } = this;
     const { id } = ctx.params;
     const data = await Document_Model.findOne({
