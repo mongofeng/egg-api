@@ -30,6 +30,12 @@ module.exports = appInfo => {
       match: '/api',
     },
 
+    // 自定义jwt:https://juejin.im/post/5c170f7ef265da614273ccb1
+    jwt: {
+      enable: true,
+      ignore: [ '/v1/user/', '/public/' ], // 哪些请求不需要认证
+    },
+
     security: {
       csrf: {
         // 判断是否需要 ignore 的方法，请求上下文 context 作为第一个参数
