@@ -20,6 +20,14 @@ module.exports = app => {
   router.post('/v1/student/statistics', controller.student.caculateStudentByMonth);
   router.post('/v1/student/statistics/status', controller.student.caculateStudentNumber);
 
+  // 课程
+  router.resources('course', '/v1/course', controller.course);
+  router.post('/v1/course/list', controller.course.list);
+  router.post('/v1/course/add', controller.course.create);
+
+  router.post('/v1/course/detailList', controller.course.detailList);
+  router.post('/v1/course/deleteStudent', controller.course.delCoursesStudent);
+
   // 通过 app.resources 方法，我们将 topics 这个资源的增删改查接口映射到了 app/controller/topics.js 文件
   router.resources('topics', '/api/v2/topics', app.controller.topics);
 
