@@ -27,19 +27,27 @@ module.exports = appInfo => {
 
     // 只对 /api 前缀的 url 路径生效
     errorHandler: {
-      match: '/api',
+      match: '/v1',
     },
 
     // 自定义jwt:https://juejin.im/post/5c170f7ef265da614273ccb1
     jwt: {
       enable: true,
-      ignore: [ '/v1/user/', '/public/' ], // 哪些请求不需要认证
+      ignore: [ '/v1/auth/', '/public/' ], // 哪些请求不需要认证
     },
 
     security: {
       csrf: {
         // 判断是否需要 ignore 的方法，请求上下文 context 作为第一个参数
         enable: false,
+      },
+    },
+
+    // mongodb的配置
+    mongoose: {
+      client: {
+        url: 'mongodb://koa-admin:131415@localhost:27017/koa-api',
+        options: {},
       },
     },
   };
