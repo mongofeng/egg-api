@@ -18,7 +18,7 @@ module.exports = () => {
       // 从 error 对象上读出各个属性，设置到响应中
       console.log('errorHandle事件触发了');
       ctx.logger.error({ error });
-      ctx.body = { error };
+      ctx.body = { error, err };
       if (status === 422) {
         ctx.body.detail = err.errors;
       }
