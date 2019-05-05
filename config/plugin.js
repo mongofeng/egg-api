@@ -18,4 +18,10 @@ module.exports = {
     enable: true,
     package: 'egg-mongoose',
   },
+
+  // 开启跨域
+  cors: {
+    enable: true,
+    package: 'egg-cors',
+  },
 };

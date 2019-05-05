@@ -41,6 +41,7 @@ module.exports = appInfo => {
         // 判断是否需要 ignore 的方法，请求上下文 context 作为第一个参数
         enable: false,
       },
+      domainWhiteList: [ 'http://localhost:3000' ],
     },
 
     // mongodb的配置
@@ -49,6 +50,12 @@ module.exports = appInfo => {
         url: 'mongodb://koa-admin:131415@localhost:27017/koa-api',
         options: {},
       },
+    },
+
+    // 跨域的配置
+    cors: {
+      origin: '*',
+      allowMethods: 'GET,HEAD,PUT,POST,DELETE,PATCH',
     },
   };
 
