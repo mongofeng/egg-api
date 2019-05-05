@@ -6,14 +6,19 @@ const uuidv1 = require('uuid/v1');
 class AuthService extends Service {
   async find({ password, account }) {
     // 获取用户的 userId和密码，找不到为null
+    const { ctx } = this;
     const user = await this.findUser(account);
+    if (!user) {
+      const errorMsg = {
+        code: 0,
+        msg: 'account is not exit!',
+        desc: '账号不存在',
+        data: user,
+      };
+      ctx.throw(403, errorMsg);
+    }
 
-    const result = !user ? {
-      code: 0,
-      msg: 'account is not exit!',
-      desc: '账号不存在',
-      data: user,
-    } : this.validate({
+    const result = this.validate({
       account,
       password,
       userId: user.userId,
@@ -72,15 +77,17 @@ class AuthService extends Service {
         },
       };
     }
-    return {
-      code: 0,
-      desc: '账号或者密码错误,请输入正确的',
-      msg: 'account or password error!',
-      data: {
-        account,
-        password,
-      },
-    };
+
+    ctx.throw(403,
+      {
+        code: 0,
+        desc: '账号或者密码错误,请输入正确的',
+        msg: 'account or password error!',
+        data: {
+          account,
+          password,
+        },
+      });
   }
 
   // 查找用户

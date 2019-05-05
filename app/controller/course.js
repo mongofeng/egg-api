@@ -7,7 +7,7 @@ class CourseController extends Controller {
   async list() {
     const { ctx } = this;
     // 调用 service 创建一个 baseResful
-    const result = await ctx.service.baseResful.list(ctx.model.Student);
+    const result = await ctx.service.baseResful.list(ctx.model.Course);
     ctx.status = 200;
     ctx.body = result;
   }
@@ -25,7 +25,7 @@ class CourseController extends Controller {
   async show() {
     const { ctx } = this;
     // 调用 service 创建一个 baseResful
-    const result = await ctx.service.baseResful.detail(ctx.model.Student);
+    const result = await ctx.service.baseResful.detail(ctx.model.Course);
     ctx.status = 200;
     ctx.body = result;
   }
@@ -34,7 +34,7 @@ class CourseController extends Controller {
   async update() {
     const { ctx } = this;
     // 调用 service 创建一个 baseResful
-    const result = await ctx.service.baseResful.update(ctx.model.Student);
+    const result = await ctx.service.baseResful.update(ctx.model.Course);
     ctx.status = 200;
     ctx.body = result;
   }
@@ -43,7 +43,7 @@ class CourseController extends Controller {
   async destroy() {
     const { ctx } = this;
     // 调用 service 创建一个 baseResful
-    const result = await ctx.service.baseResful.del(ctx.model.Student);
+    const result = await ctx.service.baseResful.del(ctx.model.Course);
     ctx.status = 200;
     ctx.body = result;
   }
