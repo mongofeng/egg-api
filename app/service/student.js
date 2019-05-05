@@ -17,7 +17,7 @@ class StudentService extends Service {
       used: 0, // 剩余学时
     };
     // 新建学时统计表
-    await ctx.model.Student.create(insertParmas);
+    await ctx.model.StudentHour.create(insertParmas);
     return {
       code: 1,
       msg: 'insert success',

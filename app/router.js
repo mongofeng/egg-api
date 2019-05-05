@@ -28,6 +28,16 @@ module.exports = app => {
   router.post('/v1/course/detailList', controller.course.detailList);
   router.post('/v1/course/deleteStudent', controller.course.delCoursesStudent);
 
+
+  // 课时
+  router.resources('class-hour', '/v1/class-hour', controller.classHour);
+  router.post('/v1/class-hour/list', controller.classHour.list);
+  router.post('/v1/class-hour/add', controller.classHour.create);
+
+  // 学时
+  router.post('/v1/student-hour/list', controller.studentHour.list);
+  router.get('/v1/student-hour/:id', controller.studentHour.show);
+
   // 通过 app.resources 方法，我们将 topics 这个资源的增删改查接口映射到了 app/controller/topics.js 文件
   router.resources('topics', '/api/v2/topics', app.controller.topics);
 
