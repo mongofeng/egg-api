@@ -65,6 +65,17 @@ module.exports = appInfo => {
         hostname: '0.0.0.0',
       },
     },
+
+    // 微信的配置
+    wechat: {
+      appid: 'wx6bce565776a81ced',
+      secret: 'b2b49cfc626b99a42536837928a32893',
+      token: 'wechat',
+      grant_type: 'client_credential', // 默认
+      defalult_url: 'https://api.weixin.qq.com/',
+      prefix: 'https://api.weixin.qq.com/cgi-bin/',
+      mpPrefix: 'https://mp.weixin.qq.com/cgi-bin/',
+    },
   };
 
   return {
