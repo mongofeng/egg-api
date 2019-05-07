@@ -26,9 +26,9 @@ module.exports = appInfo => {
     middleware: [ 'errorHandler', 'jwt' ],
 
     // 只对 /api 前缀的 url 路径生效
-    errorHandler: {
-      match: '/v1',
-    },
+    // errorHandler: {
+    //   match: '/v1',
+    // },
 
     // 自定义jwt:https://juejin.im/post/5c170f7ef265da614273ccb1
     jwt: {

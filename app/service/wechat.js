@@ -58,7 +58,7 @@ class WechatService extends Service {
     this.checkSuccess(result);
     // {errcode: 0, errmsg: "ok", msgid: 731267919140847600}
     // {errcode: 40003, errmsg: "invalid openid hint: [q14a3a0311shc2]"}
-    if (result.data && result.data.errorMsg !== 'ok') {
+    if (result.data && result.data.errmsg !== 'ok') {
       this.ctx.throw(403, result.data);
     }
     return result.data;
