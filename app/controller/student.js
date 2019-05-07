@@ -47,24 +47,6 @@ class StudentController extends Controller {
     ctx.status = 200;
     ctx.body = result;
   }
-
-  /**
-   * 特有功能
-   */
-  async caculateStudentByMonth() {
-    const { ctx } = this;
-    const result = await ctx.service.student.caculateStudentByMonth();
-    ctx.status = 200;
-    ctx.body = result;
-  }
-
-
-  async caculateStudentNumber() {
-    const { ctx } = this;
-    const result = await ctx.service.student.caculateStudentNumber();
-    ctx.status = 200;
-    ctx.body = result;
-  }
 }
 
 module.exports = StudentController;
