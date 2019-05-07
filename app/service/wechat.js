@@ -66,8 +66,9 @@ class WechatService extends Service {
   }
 
   // 数据库里面没有
-  async getformWechat(data) {
+   getformWechat = async(data) => {
     if (!data) {
+      console.log(this);
       const { access_token, expires_in } = await this.fetchAccessToken();
       await this.ctx.model.Wechat.create({ access_token, expires_in });
       console.log('从微信拿的，初始化数据库');
@@ -78,7 +79,7 @@ class WechatService extends Service {
   }
 
   // 数据库里面有,但是已经失效了
-  async updateWechatToken(data) {
+   updateWechatToken = async(data) => {
     const now = new Date();
     const currentDate = now.getTime();
     const updateDate = data.updateDate.getTime();
