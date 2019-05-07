@@ -61,6 +61,16 @@ class CourseController extends Controller {
   }
 
   /**
+   * 批量导入课程
+   */
+  async batchCourses() {
+    const { ctx } = this;
+    const result = await ctx.service.course.batchCourses();
+    ctx.status = 200;
+    ctx.body = result;
+  }
+
+  /**
    * 包含老师姓名的课程列表
    */
   async detailList() {

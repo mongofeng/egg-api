@@ -26,6 +26,7 @@ module.exports = app => {
   router.post('/v1/course/add', controller.course.create);
   router.post('/v1/course/detailList', controller.course.detailList);
   router.post('/v1/course/deleteStudent', controller.course.delCoursesStudent);
+  router.post('/v1/course/batchCourse', controller.course.batchCourses);
 
 
   // 课时
