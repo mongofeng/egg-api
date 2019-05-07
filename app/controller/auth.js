@@ -20,9 +20,7 @@ class AuthController extends Controller {
    */
   async login() {
     const { ctx } = this;
-    ctx.logger.debug('debug info');
     ctx.logger.info('some request data: %j', ctx.request.body);
-    ctx.logger.warn('WARNNING!!!!');
     const body = ctx.request.body;
     // 校验 `ctx.request.body` 是否符合我们预期的格式
     // 如果参数校验未通过，将会抛出一个 status = 422 的异常
