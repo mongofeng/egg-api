@@ -1,18 +1,18 @@
 'use strict';
 const Subscription = require('egg').Subscription;
 
-class UpdateCache extends Subscription {
+class WechatSchedule extends Subscription {
   // 通过 schedule 属性来设置定时任务的执行间隔等配置
   static get schedule() {
     return {
-      disable: true, // 配置该参数为 true 时，这个定时任务不会被启动。
-      interval: '1m', // 1 分钟间隔
-      type: 'worker', // 指定所有的 worker 都需要执行
+      cron: '0 30 8 * * *', // 8.30分执行一次
+      type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
   }
 
   // subscribe 是真正定时任务执行时被运行的函数
   async subscribe() {
+    console.log('wechat 定时任务执行 start');
     const { ctx } = this;
     const data = {
       touser: 'oVB5OwyVDKfTZq4T61_p2roSg1tA',
@@ -45,7 +45,8 @@ class UpdateCache extends Subscription {
     const { access_token } = await ctx.service.wechat.wechatToken();
     await ctx.service.wechat.sendTemplateMsg({ access_token, data });
     console.log('定时任务执行');
+    console.log('wechat 定时任务执行');
   }
 }
 
-module.exports = UpdateCache;
+module.exports = WechatSchedule;
