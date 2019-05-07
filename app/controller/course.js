@@ -16,7 +16,7 @@ class CourseController extends Controller {
   async create() {
     const { ctx } = this;
     // 调用 service 创建一个 baseResful
-    const result = await ctx.service.course.add();
+    const result = await ctx.service.baseResful.add(ctx.model.Course);
     ctx.status = 200;
     ctx.body = result;
   }
