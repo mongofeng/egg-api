@@ -14,14 +14,16 @@ module.exports = () => {
         ctx.locals.userId = res.data.userId;
         await next();
       } else {
-        ctx.body = res;
+        ctx.throw(403, res);
       }
     } else {
-      ctx.body = {
+      const errorMsg = {
         code: 0,
         msg: 'token is not exit',
         desc: 'token 不存在',
       };
+
+      ctx.throw(401, errorMsg);
     }
   };
 };
