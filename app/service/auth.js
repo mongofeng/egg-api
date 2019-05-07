@@ -91,10 +91,10 @@ class AuthService extends Service {
   }
 
   // 查找用户
-  async findUser(account) {
+  async findUser(account, props = 'account') {
     const { ctx } = this;
     return await ctx.model.Auth.findOne({
-      account,
+      [props]: account,
     });
   }
 }
