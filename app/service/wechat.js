@@ -14,7 +14,11 @@ class WechatService extends Service {
       // 明确告诉 HttpClient 以 JSON 格式处理返回的响应 body
       dataType: 'json',
     });
-    console.log(result);
+    if (result.status !== 200) {
+      const errorMsg = result.data && result.data.error_msg ? result.data.error_msg : 'unknown error';
+      this.ctx.throw(result.status, errorMsg);
+    }
+    return result.data;
   }
 
   /**

@@ -33,7 +33,7 @@ module.exports = appInfo => {
     // 自定义jwt:https://juejin.im/post/5c170f7ef265da614273ccb1
     jwt: {
       enable: true,
-      ignore: [ '/v1/auth/', '/public/' ], // 哪些请求不需要认证
+      ignore: [ '/v1/auth/', '/public/', '/wechat/' ], // 哪些请求不需要认证
     },
 
     security: {

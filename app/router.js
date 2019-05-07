@@ -39,6 +39,10 @@ module.exports = app => {
   router.post('/v1/statistics/stuCountByTime', controller.statistics.stuCountByTime);
   router.post('/v1/statistics/stuCountByStatus', controller.statistics.stuCountByStatus);
 
+
+  // 微信
+  router.get('/wechat/token', controller.wechat.fetchAccessToken);
+
   // 通过 app.resources 方法，我们将 topics 这个资源的增删改查接口映射到了 app/controller/topics.js 文件
   // router.resources('topics', '/api/v2/topics', app.controller.topics);
 
