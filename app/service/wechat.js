@@ -106,7 +106,7 @@ class WechatService extends Service {
     const currentDate = now.getTime();
     const updateDate = data.updateDate.getTime();
     const expires = currentDate - updateDate;
-    if (expires > updateDate.expires_in * 1000) {
+    if (expires > data.expires_in * 1000) {
       const { access_token, expires_in } = await this.fetchAccessToken();
       const params = { access_token, expires_in };
       await this.ctx.model.Wechat.update(
