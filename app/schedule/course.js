@@ -5,7 +5,7 @@ class CourseSchedule extends Subscription {
   // 通过 schedule 属性来设置定时任务的执行间隔等配置
   static get schedule() {
     return {
-      cron: '0 0 9 * * *', // 9.0分执行一次
+      cron: '0 0 10 * * *', // 10.0分执行一次
       type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
   }
