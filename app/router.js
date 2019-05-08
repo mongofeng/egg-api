@@ -38,6 +38,7 @@ module.exports = app => {
   // 统计接口
   router.post('/v1/statistics/stuCountByTime', controller.statistics.stuCountByTime);
   router.post('/v1/statistics/stuCountByStatus', controller.statistics.stuCountByStatus);
+  router.post('/v1/statistics/hourCountByTime', controller.statistics.hourCountByTime);
 
 
   // 微信

@@ -20,6 +20,13 @@ class StatisticsController extends Controller {
     ctx.status = 200;
     ctx.body = result;
   }
+
+  async hourCountByTime() {
+    const { ctx } = this;
+    const result = await ctx.service.statistics.hourCountByTime();
+    ctx.status = 200;
+    ctx.body = result;
+  }
 }
 
 module.exports = StatisticsController;
