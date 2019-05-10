@@ -46,4 +46,6 @@ module.exports = app => {
   router.post('/wechat/openid', controller.wechat.fetchOpenId);
   router.post('/wechat/template', controller.wechat.sendTemplateMsg);
 
+  router.resources('server', '/wechat/server', controller.wechatServer);
+
 };

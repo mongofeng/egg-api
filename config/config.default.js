@@ -70,7 +70,7 @@ module.exports = appInfo => {
     wechat: {
       appid: 'wx6bce565776a81ced',
       secret: 'b2b49cfc626b99a42536837928a32893',
-      token: 'wechat',
+      token: 'wechat', // 消息服务号需要的token
       grant_type: 'client_credential', // 默认
       defalult_url: 'https://api.weixin.qq.com/',
       prefix: 'https://api.weixin.qq.com/cgi-bin/',

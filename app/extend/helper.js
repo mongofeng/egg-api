@@ -4,6 +4,23 @@ const path = require('path');
 const jwt = require('jsonwebtoken'); // 引入jsonwebtoken
 const crypto = require('crypto'); // 导入加密模块,导入node自带的加密模块(不需要安装)
 
+const xml2js = require('xml2js');
+
+function parseXML(xml) {
+  return new Promise((resolve, reject) => {
+    xml2js.parseString(
+      xml,
+      { trim: true, explicitArray: false, ignoreAttrs: true },
+      function(err, result) {
+        if (err) {
+          return reject(err);
+        }
+        resolve(result.xml);
+      }
+    );
+  });
+}
+
 // 加密
 const encrypt = password => {
   const md5 = crypto.createHash('md5');
@@ -61,6 +78,7 @@ module.exports = {
   validate,
   createToken,
   compose,
+  parseXML,
 };
 
 
