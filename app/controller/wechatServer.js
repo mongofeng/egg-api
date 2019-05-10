@@ -13,7 +13,6 @@ class WechatServerController extends Controller {
   async create() {
     const { ctx } = this;
     const result = await ctx.service.wechatServer.handleWechatMsg();
-    // ctx.status = 200;
     ctx.type = 'application/xml';
     ctx.body = result;
   }

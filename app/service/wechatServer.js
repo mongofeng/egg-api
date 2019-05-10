@@ -49,7 +49,7 @@ class WechatServerService extends Service {
     <FromUserName><![CDATA[${formatted.ToUserName}]]></FromUserName> 
     <CreateTime>${new Date().getTime()}</CreateTime> 
     <MsgType><![CDATA[text]]></MsgType> 
-    <Content><![CDATA[这儿是学员中心的吖]]></Content> 
+    <Content><![CDATA[您好，欢迎来到杨瑾美术中心的公众号天地]]></Content> 
     </xml>`);
   }
 }
