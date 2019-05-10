@@ -39,9 +39,9 @@ class WechatServerService extends Service {
       limit: '1mb',
       encoding: ctx.request.charset || 'utf-8',
     });
-    console.log(xml);
+
     const formatted = await this.ctx.helper.parseXML(xml);
-    console.log(formatted);
+
     // ctx.body = 'success' // 一定要success，否则报错
     // ctx.type = 'application/xml';
     return (`<xml> 
@@ -49,7 +49,7 @@ class WechatServerService extends Service {
     <FromUserName><![CDATA[${formatted.ToUserName}]]></FromUserName> 
     <CreateTime>${new Date().getTime()}</CreateTime> 
     <MsgType><![CDATA[text]]></MsgType> 
-    <Content><![CDATA[这儿是学员中学]]></Content> 
+    <Content><![CDATA[这儿是学员中心的吖]]></Content> 
     </xml>`);
   }
 }
