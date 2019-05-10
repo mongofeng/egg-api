@@ -39,7 +39,8 @@
     "cov": "egg-bin cov",
     "lint": "eslint .",
     "ci": "npm run lint && npm run cov",
-    "autod": "autod"
+    "autod": "autod",
+    "deloy": "npm install --production && npm start"
   },
   "ci": {
     "version": "10"
