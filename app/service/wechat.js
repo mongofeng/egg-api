@@ -31,12 +31,14 @@ class WechatService extends Service {
    */
   async fetchOpenId(code) {
     const { appid, secret, defalult_url } = this.config.wechat;
-    const url = `${defalult_url}/sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${code}&grant_type=authorization_code`;
+    const url = `${defalult_url}sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${code}&grant_type=authorization_code`;
+    console.log(url);
     const result = await this.ctx.curl(url, {
       dataType: 'json',
     });
     console.log(result);
     this.checkSuccess(result);
+    return result.data;
   }
 
   /**
