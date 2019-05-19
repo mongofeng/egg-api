@@ -40,12 +40,29 @@ module.exports = app => {
   router.post('/v1/statistics/stuCountByStatus', controller.statistics.stuCountByStatus);
   router.post('/v1/statistics/hourCountByTime', controller.statistics.hourCountByTime);
 
-
+  // 以下为微信接口
   // 微信
   router.get('/wechat/token', controller.wechat.fetchAccessToken);
   router.post('/wechat/openid', controller.wechat.fetchOpenId);
   router.post('/wechat/template', controller.wechat.sendTemplateMsg);
 
+  // 微信消息接口
   router.resources('server', '/wechat/server', controller.wechatServer);
 
+  // 微信用户接口
+  // 学生
+  router.resources('student', '/wechat/student', controller.student);
+  router.post('/wechat/student/list', controller.student.list);
+
+  // 课程
+  //  router.resources('course', '/wechat/course', controller.course);
+  router.post('/wechat/course/list', controller.course.list);
+
+  // 课时
+  // router.resources('class-hour', '/v1/class-hour', controller.classHour);
+  router.post('/wechat/class-hour/list', controller.classHour.list);
+
+  // 学时
+  // router.post('/wechat/student-hour/list', controller.studentHour.list);
+  router.get('/wechat/student-hour/:id', controller.studentHour.show);
 };
