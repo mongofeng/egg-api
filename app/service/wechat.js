@@ -16,11 +16,9 @@ class WechatService extends Service {
     const { appid, secret, grant_type, prefix } = this.config.wechat;
     const url = `${prefix}token?grant_type=${grant_type}&appid=${appid}&secret=${secret}`;
     const result = await this.ctx.curl(url, {
-      // 明确告诉 HttpClient 以 JSON 格式处理返回的响应 body
       dataType: 'json',
     });
 
-    this.checkSuccess(result);
     return result.data;
   }
 
@@ -32,12 +30,10 @@ class WechatService extends Service {
   async fetchOpenId(code) {
     const { appid, secret, defalult_url } = this.config.wechat;
     const url = `${defalult_url}sns/oauth2/access_token?appid=${appid}&secret=${secret}&code=${code}&grant_type=authorization_code`;
-    console.log(url);
     const result = await this.ctx.curl(url, {
       dataType: 'json',
     });
-    console.log(result);
-    this.checkSuccess(result);
+
     return result.data;
   }
 
@@ -57,25 +53,21 @@ class WechatService extends Service {
       // 明确告诉 HttpClient 以 JSON 格式处理返回的响应 body
       dataType: 'json',
     });
-    this.checkSuccess(result);
-    // {errcode: 0, errmsg: "ok", msgid: 731267919140847600}
-    // {errcode: 40003, errmsg: "invalid openid hint: [q14a3a0311shc2]"}
-    if (result.data && result.data.errmsg !== 'ok') {
-      this.ctx.throw(403, result.data);
-    }
     return result.data;
   }
 
-  // 封装统一的调用检查函数，可以在查询、创建和更新等 Service 中复用
-  checkSuccess(result) {
-    if (result.status !== 200) {
-      const errorMsg =
-        result.data && result.data.error_msg
-          ? result.data.error_msg
-          : 'unknown error';
-      this.ctx.throw(result.status, errorMsg);
-    }
+  // https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140839
+  async fetchUserInfo({ access_token, openid }) {
+    const { prefix } = this.config.wechat;
+    const url = `${prefix}user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+
+    const result = await this.ctx.curl(url, {
+      dataType: 'json',
+    });
+
+    return result.data;
   }
+
 
   /**
    * 获取token的函数

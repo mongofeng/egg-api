@@ -44,6 +44,7 @@ module.exports = app => {
   // 微信
   router.get('/wechat/token', controller.wechat.fetchAccessToken);
   router.post('/wechat/openid', controller.wechat.fetchOpenId);
+  router.post('/wechat/userInfo', controller.wechat.fetchUserInfo);
   router.post('/wechat/template', controller.wechat.sendTemplateMsg);
 
   // 微信消息接口

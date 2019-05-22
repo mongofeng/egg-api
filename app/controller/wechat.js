@@ -28,6 +28,16 @@ class WechatController extends Controller {
     ctx.status = 200;
     ctx.body = result;
   }
+
+
+  async fetchUserInfo() {
+    const { ctx } = this;
+    const { openid } = ctx.request.body;
+    const { access_token } = await ctx.service.wechat.wechatToken();
+    const result = await ctx.service.wechat.fetchUserInfo({ access_token, openid });
+    ctx.status = 200;
+    ctx.body = result;
+  }
 }
 
 module.exports = WechatController;
