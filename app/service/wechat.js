@@ -68,6 +68,21 @@ class WechatService extends Service {
     return result.data;
   }
 
+  /**
+   * 获取模板列表
+   * https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1433751277
+   * @param {*} param0 access_token
+   */
+  async fetchTemplateList({ access_token }) {
+    const { defalult_url } = this.config.wechat;
+    const url = `${defalult_url}cgi-bin/template/get_all_private_template?access_token=${access_token}`;
+    const result = await this.ctx.curl(url, {
+      dataType: 'json',
+    });
+
+    return result.data;
+  }
+
 
   /**
    * 获取token的函数

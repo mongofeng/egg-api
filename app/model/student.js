@@ -3,7 +3,7 @@ module.exports = app => {
   const mongoose = app.mongoose;
 
 
-  // 姓名，生日，性别：男/女=》1/2，年龄，紧急联系人，手机，地址，openid， 选择老师，状态：在读，毕业 1/2 备注：‘’, 创建时间，更新时间
+  // 姓名，生日，性别：男/女=》1/2，年龄，紧急联系人，手机，地址，openid， 选择老师，状态：在读，毕业 1/2 备注：‘’, 创建时间，更新时间, templateFlag: true
   const Schema = mongoose.Schema;
   const userSchema = new Schema({
     name: {
@@ -62,6 +62,10 @@ module.exports = app => {
     desc: {
       type: String,
       default: '',
+    },
+    isSendTemplate: {
+      type: Boolean,
+      default: false,
     },
   }, { collection: 'student', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
 
