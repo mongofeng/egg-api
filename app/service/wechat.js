@@ -13,8 +13,8 @@ class WechatService extends Service {
    * 不需要配置服务器
    */
   async fetchAccessToken() {
-    const { appid, secret, grant_type, prefix } = this.config.wechat;
-    const url = `${prefix}token?grant_type=${grant_type}&appid=${appid}&secret=${secret}`;
+    const { appid, secret, grant_type, defalult_url } = this.config.wechat;
+    const url = `${defalult_url}cgi-bin/token?grant_type=${grant_type}&appid=${appid}&secret=${secret}`;
     const result = await this.ctx.curl(url, {
       dataType: 'json',
     });
@@ -42,8 +42,8 @@ class WechatService extends Service {
    * @param {*} param0 token, data
    */
   async sendTemplateMsg({ access_token, data }) {
-    const { prefix } = this.config.wechat;
-    const url = `${prefix}message/template/send?access_token=${access_token}`;
+    const { defalult_url } = this.config.wechat;
+    const url = `${defalult_url}cgi-bin/message/template/send?access_token=${access_token}`;
     const result = await this.ctx.curl(url, {
       // 必须指定 method
       method: 'POST',
@@ -58,8 +58,8 @@ class WechatService extends Service {
 
   // https://mp.weixin.qq.com/wiki?t=resource/res_main&id=mp1421140839
   async fetchUserInfo({ access_token, openid }) {
-    const { prefix } = this.config.wechat;
-    const url = `${prefix}user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
+    const { defalult_url } = this.config.wechat;
+    const url = `${defalult_url}cgi-bin/user/info?access_token=${access_token}&openid=${openid}&lang=zh_CN`;
 
     const result = await this.ctx.curl(url, {
       dataType: 'json',

@@ -73,8 +73,7 @@ module.exports = appInfo => {
       token: 'wechat', // 消息服务号需要的token
       grant_type: 'client_credential', // 默认
       defalult_url: 'https://api.weixin.qq.com/',
-      prefix: 'https://api.weixin.qq.com/cgi-bin/',
-      mpPrefix: 'https://mp.weixin.qq.com/cgi-bin/',
+      mp_url: 'https://mp.weixin.qq.com/',
     },
   };
 
