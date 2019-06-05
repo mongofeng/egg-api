@@ -1,0 +1,13 @@
+version: '2.1'
+
+services:
+  egg-api:
+    image: egg-api
+    build: .
+    environment:
+      NODE_ENV: development
+    ports:
+      - 3330:3330
+      - 9229:9229
+    ## set your startup file here
+    command: node --inspect index.js

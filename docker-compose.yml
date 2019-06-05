@@ -1,0 +1,10 @@
+version: '2.1'
+
+services:
+  egg-api:
+    image: egg-api
+    build: .
+    environment:
+      NODE_ENV: production
+    ports:
+      - 3330:3330
