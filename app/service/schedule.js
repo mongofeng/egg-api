@@ -24,6 +24,7 @@ class ScheduleService extends Service {
         endDate: {
           $gte: nowDate.getTime(),
         },
+        status: 1,
         // day: nowDate.getDay(),
       },
     }, {
@@ -52,9 +53,33 @@ class ScheduleService extends Service {
           as: 'student',
         },
     }, {
+      $lookup:
+      {
+        from: 'teacher',
+        let: { tId: { $toObjectId: '$teacherId' } },
+        pipeline: [
+          {
+            $match:
+            {
+              $expr: // 接受聚合表达式
+                { $eq: [ '$_id', '$$tId' ] },
+            },
+          },
+          {
+            $project: {
+              teacher_name: '$name',
+              _id: 0,
+            },
+          },
+        ],
+        as: 'teacherMsg',
+      },
+    },
+    {
       $replaceRoot: {
         newRoot: {
           $mergeObjects: [
+            { $arrayElemAt: [ '$teacherMsg', 0 ] }, // 拿数组的第一位，变成一个object
             { $arrayElemAt: [ '$student', 0 ] }, // 拿数组的第一位，变成一个object
             '$$ROOT', // 覆盖数组
           ],
@@ -66,6 +91,10 @@ class ScheduleService extends Service {
         stu_name: 1,
         name: 1,
         stu_id: 1,
+        day: 1,
+        time: 1,
+        teacher_name: 1,
+        desc: 1,
       },
     }, {
       $match: {
