@@ -17,10 +17,11 @@ class CourseSchedule extends Subscription {
 
     const list = await ctx.service.schedule.fetchCurrentCourse();
     console.log(list);
+    const { template_id } = this.config.schedule.course;
     const api = list.map(item => {
       return {
         touser: item.openId,
-        template_id: 'LGHVsyKEBAsk79EDA2surQhWVSGl-oSq-MtPJ4fe1r0',
+        template_id,
         url: 'http://47.107.144.222/platform',
         data: {
           course: {

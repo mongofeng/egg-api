@@ -1,25 +1,28 @@
 'use strict';
 const Subscription = require('egg').Subscription;
 
-class UpdateCache extends Subscription {
+class ClassHourSchedule extends Subscription {
   // 通过 schedule 属性来设置定时任务的执行间隔等配置
   static get schedule() {
     return {
       disable: true, // 配置该参数为 true 时，这个定时任务不会被启动。
-      interval: '1m', // 1 分钟间隔
-      type: 'worker', // 指定所有的 worker 都需要执行
+      cron: '0 30 8 * * *', // 8.30分执行一次
+      // interval: '1m', // 1 分钟间隔
+      type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
   }
 
   // subscribe 是真正定时任务执行时被运行的函数
   async subscribe() {
     const { ctx } = this;
+
     const list = await ctx.service.schedule.fetchCurrentCourse();
+    const { template_id } = this.config.schedule.course;
     console.log(list);
     const api = list.map(item => {
       return {
         touser: item.openId,
-        template_id: 'LGHVsyKEBAsk79EDA2surQhWVSGl-oSq-MtPJ4fe1r0',
+        template_id,
         url: 'http://47.107.144.222/platform',
         data: {
           course: {
@@ -51,4 +54,4 @@ class UpdateCache extends Subscription {
   }
 }
 
-module.exports = UpdateCache;
+module.exports = ClassHourSchedule;

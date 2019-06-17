@@ -75,6 +75,13 @@ module.exports = appInfo => {
       defalult_url: 'https://api.weixin.qq.com/',
       mp_url: 'https://mp.weixin.qq.com/',
     },
+
+    // 定时任务的配置
+    schedule: {
+      course: {
+        template_id: 'LGHVsyKEBAsk79EDA2surQhWVSGl-oSq-MtPJ4fe1r0',
+      },
+    },
   };
 
   return {
