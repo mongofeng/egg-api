@@ -41,6 +41,7 @@
     "ci": "npm run lint && npm run cov",
     "autod": "autod",
     "sit": "EGG_SERVER_ENV=sit NODE_ENV=productions npm start",
+    "docker": "EGG_SERVER_ENV=docker egg-scripts start --title=egg-server-api",
     "deloy": "npm install --production && npm start"
   },
   "ci": {
