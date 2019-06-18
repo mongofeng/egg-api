@@ -47,7 +47,8 @@ module.exports = appInfo => {
     // mongodb的配置
     mongoose: {
       client: {
-        url: 'mongodb://koa-admin:131415@localhost:27017/koa-api',
+        // url: 'mongodb://koa-admin:131415@localhost:27017/koa-api',
+        url: 'mongodb://localhost:27017/koa-api',
         options: {},
       },
     },
