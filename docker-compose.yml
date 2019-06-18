@@ -1,10 +1,24 @@
 version: '2.1'
 
 services:
+  database:
+    image: mongo
+    restart: always
+    volumes:
+      - ~/docker/mongo/data/db:/data/db
+    networks:
+      - webapp-network
   egg-api:
     image: egg-api
+    depends_on:
+      - database
     build: .
     environment:
       NODE_ENV: production
     ports:
       - 3330:3330
+    networks:
+      - webapp-network
+networks:
+  webapp-network:
+    driver: bridge
