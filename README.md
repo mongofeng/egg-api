@@ -41,5 +41,11 @@ docker run -p 3330:3330 --network webapp-network -d egg-api
 
 ```
 
+### docker-compose
+
+```
+docker-compose up -d
+```
+
 
 [egg]: https://eggjs.org
