@@ -9,10 +9,11 @@ services:
     networks:
       - webapp-network
   egg-api:
-    image: egg-api
+    # image: egg-api
+    image: registry.cn-hangzhou.aliyuncs.com/yangpu/egg-web
     depends_on:
       - database
-    build: .
+    # build: .
     environment:
       NODE_ENV: production
     ports:
