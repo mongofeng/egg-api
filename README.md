@@ -49,3 +49,4 @@ docker-compose up -d
 
 
 [egg]: https://eggjs.org
+[docker中使用nginx容器代理其他容器](https://www.jianshu.com/p/7609e19b5b88)
