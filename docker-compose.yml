@@ -19,6 +19,18 @@ services:
       - 3330:3330
     networks:
       - webapp-network
+  nginx_web:
+    image: nginx
+    ports:
+      - 80:80
+    container_name: 'nginx_web'
+    restart: always
+    networks:
+      - webapp-network
+    volumes:
+      # - ~/docker/nginx/html:/usr/share/nginx/html/:ro
+      - ~/docker/nginx/html:/usr/share/nginx/html
+      # - ./nginx.conf:/etc/nginx/nginx.conf
 networks:
   webapp-network:
     driver: bridge
