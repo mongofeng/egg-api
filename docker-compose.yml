@@ -18,8 +18,8 @@ services:
     # build: .
     environment:
       NODE_ENV: production
-    ports:
-      - 3330:3330
+    # ports:
+    #   - 3330:3330
     networks:
       - webapp-network
   nginx_web:
@@ -31,10 +31,12 @@ services:
     networks:
       - webapp-network
     volumes:
-      # - ~/docker/nginx/html:/usr/share/nginx/html/:ro
-      - ~/docker/nginx/html:/usr/share/nginx/html
+      - ~/dockercollection/nginx/html:/usr/share/nginx/html/:ro
+      - ~/dockercollection/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      # - ~/docker/nginx/html:/usr/share/nginx/html
       # - ./nginx.conf:/etc/nginx/conf.d/default.conf
       # - ./nginx.conf:/etc/nginx/nginx.conf
+    # command: [nginx-debug, '-g', 'daemon off;']
 networks:
   webapp-network:
     driver: bridge
