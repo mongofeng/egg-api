@@ -2,11 +2,6 @@
 
 education api
 
-## QuickStart
-
-<!-- add docs here for user -->
-
-see [egg docs][egg] for more detail.
 
 ### Development
 
@@ -44,10 +39,11 @@ docker run -p 3330:3330 --network webapp-network -d egg-api
 ### docker-compose
 
 ```
+
 docker-compose up -d
 ```
 
+### 参考文档
 
-[egg]: https://eggjs.org
-[docker中使用nginx容器代理其他容器](https://www.jianshu.com/p/7609e19b5b88)
-[Docker Compose实例之nginx反向代理GitLab](https://www.jianshu.com/p/7de81c69c4a8)
+- [docker中使用nginx容器代理其他容器](https://www.jianshu.com/p/7609e19b5b88)
+- [Docker Compose实例之nginx反向代理GitLab](https://www.jianshu.com/p/7de81c69c4a8)

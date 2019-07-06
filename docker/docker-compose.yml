@@ -10,16 +10,17 @@ services:
     networks:
       - webapp-network
   egg-api:
-    # image: egg-api
-    container_name: 'egg-api'
-    image: registry.cn-hangzhou.aliyuncs.com/yangpu/egg-web:1.0.0
-    depends_on:
-      - database
-    # build: .
-    environment:
-      NODE_ENV: production
+    # image: registry.cn-hangzhou.aliyuncs.com/yangpu/egg-web:1.0.0
     # ports:
     #   - 3330:3330
+    build: ../
+    image: egg-api
+    container_name: 'egg-api'
+    restart: always
+    depends_on:
+      - database
+    environment:
+      NODE_ENV: production
     networks:
       - webapp-network
   nginx_web:
@@ -31,12 +32,8 @@ services:
     networks:
       - webapp-network
     volumes:
-      - ~/dockercollection/nginx/html:/usr/share/nginx/html/:ro
-      - ~/dockercollection/nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-      # - ~/docker/nginx/html:/usr/share/nginx/html
-      # - ./nginx.conf:/etc/nginx/conf.d/default.conf
-      # - ./nginx.conf:/etc/nginx/nginx.conf
-    # command: [nginx-debug, '-g', 'daemon off;']
+      - ./html:/usr/share/nginx/html/:ro
+      - ./default.conf:/etc/nginx/conf.d/default.conf
 networks:
   webapp-network:
     driver: bridge
