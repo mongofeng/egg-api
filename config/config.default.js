@@ -48,7 +48,7 @@ module.exports = appInfo => {
     mongoose: {
       client: {
         // url: 'mongodb://koa-admin:131415@localhost:27017/koa-api',
-        url: 'mongodb://localhost:27017/koa-api',
+        url: 'mongodb://localhost:27017/education',
         options: {},
       },
     },

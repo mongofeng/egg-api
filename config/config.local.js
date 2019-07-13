@@ -9,7 +9,7 @@ module.exports = appInfo => {
    */
   config.mongoose = {
     client: {
-      url: 'mongodb://localhost:27017/koa-api',
+      url: 'mongodb://localhost:27017/education',
       options: {},
     },
   };
