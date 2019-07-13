@@ -5,19 +5,21 @@ const Service = require('egg').Service;
 class ScheduleService extends Service {
   // 上课提醒
   async fetchCurrentCourse() {
+    // 当天的课程
     const { ctx } = this;
     const nowDate = new Date();
+    const time = nowDate.getTime();
     const data = await ctx.model.Course.aggregate([
       {
         $match: {
           startDate: {
-            $lte: nowDate.getTime(),
+            $lte: time,
           },
           endDate: {
-            $gte: nowDate.getTime(),
+            $gte: time,
           },
           status: 1,
-          // day: nowDate.getDay(),
+          day: nowDate.getDay(),
         },
       },
       {
@@ -95,9 +97,14 @@ class ScheduleService extends Service {
           time: 1,
           teacher_name: 1,
           desc: 1,
+          startTime: 1,
+          endTime: 1,
         },
       },
     ]);
+
+    console.log('------------result-----------------------');
+    console.log(data);
     return data;
   }
 

@@ -44,6 +44,14 @@ module.exports = app => {
         type: Number,
         default: 0,
       },
+      startTime: {
+        type: String,
+        default: null,
+      },
+      endTime: {
+        type: String,
+        default: null,
+      },
     },
     {
       collection: 'course',

@@ -7,6 +7,7 @@ class CourseSchedule extends Subscription {
     return {
       // cron: '0 0 10 * * *', // 10.0分执行一次
       cron: '0 30 8 * * *', // 8.30分执行一次
+      // interval: '1m', // 1 分钟间隔
       type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
   }
@@ -15,6 +16,12 @@ class CourseSchedule extends Subscription {
   async subscribe() {
     const { ctx } = this;
 
+    const DAY_LABEL = {
+      1: '上午',
+      2: '下午',
+      3: '晚上',
+    };
+
     const list = await ctx.service.schedule.fetchCurrentCourse();
     console.log(list);
     const { template_id } = this.config.schedule.course;
@@ -22,14 +29,14 @@ class CourseSchedule extends Subscription {
       return {
         touser: item.openId,
         template_id,
-        url: 'http://47.107.144.222/platform',
+        url: 'http://yangjin-art.top/platform',
         data: {
           course: {
             value: item.name,
             color: '#173177',
           },
           time: {
-            value: item.time,
+            value: (item.endTime && item.startTime) ? `${item.startTime}-${item.endTime}` : DAY_LABEL[item.time],
             color: '#1d1d1d',
           },
           teacher: {
