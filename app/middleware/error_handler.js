@@ -2,6 +2,7 @@
 
 module.exports = () => {
   return async function errorHandler(ctx, next) {
+    console.log(ctx.url);
     try {
       await next();
     } catch (err) {
