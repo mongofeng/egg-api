@@ -31,16 +31,16 @@ class CourseSchedule extends Subscription {
         template_id,
         url: 'http://yangjin-art.top/platform',
         data: {
-          course: {
+          first: {
+            value: `您好,${item.stu_name}同学,你今天的课程安排来了`,
+            color: '#1d1d1d',
+          },
+          keyword1: {
             value: item.name,
             color: '#173177',
           },
-          time: {
+          keyword2: {
             value: (item.endTime && item.startTime) ? `${item.startTime}-${item.endTime}` : DAY_LABEL[item.time],
-            color: '#1d1d1d',
-          },
-          teacher: {
-            value: item.teacher_name,
             color: '#1d1d1d',
           },
           remark: {
