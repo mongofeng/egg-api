@@ -82,6 +82,9 @@ module.exports = appInfo => {
       course: {
         template_id: 'LGHVsyKEBAsk79EDA2surQhWVSGl-oSq-MtPJ4fe1r0',
       },
+      sign: {
+        template_id: 'LGHVsyKEBAsk79EDA2surQhWVSGl-oSq-MtPJ4fe1r0',
+      },
     },
   };
 
