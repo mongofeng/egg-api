@@ -95,6 +95,7 @@ class WechatService extends Service {
       this.getformDatabase
     );
     const result = await fun(data);
+    // result.access_token = '23_yET7u-RIASKHw5mYcDcA0TeaMKdRwKlALACmAO72M41pbjR0EQj0IxOgpw-tM-cOsvkOuqZ6L3U5clg16P51rzgwBL2R_q_s0WYNyNFVh87wcHpIDNWAwWbNCJrpwmj9uyZECJdGvro6a_L0STNhAAAMNH';
     return result;
   }
 
