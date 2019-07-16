@@ -4,7 +4,7 @@ const Service = require('egg').Service;
 const getRawBody = require('raw-body');
 
 class WechatServerService extends Service {
-  validateWechatConfig () {
+  validateWechatConfig() {
     // 1.获取微信服务器Get请求的参数 signature、timestamp、nonce、echostr
     const { signature, timestamp, nonce, echostr } = this.ctx.query;
     // signature, //微信加密签名
@@ -31,7 +31,7 @@ class WechatServerService extends Service {
   }
 
 
-  async handleWechatMsg () {
+  async handleWechatMsg() {
     // 取原始数据
     const { ctx } = this;
     const xml = await getRawBody(this.ctx.req, {
@@ -49,7 +49,7 @@ class WechatServerService extends Service {
     <FromUserName><![CDATA[${formatted.ToUserName}]]></FromUserName> 
     <CreateTime>${new Date().getTime()}</CreateTime> 
     <MsgType><![CDATA[text]]></MsgType> 
-    <Content><![CDATA[您好，欢迎来到杨瑾美术中心的公众号天地]]></Content> 
+    <Content><![CDATA[您好，欢迎来到杨瑾美术中心]]></Content> 
     </xml>`);
   }
 }
