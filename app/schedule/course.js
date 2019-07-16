@@ -6,7 +6,7 @@ class CourseSchedule extends Subscription {
   static get schedule() {
     return {
       // cron: '0 0 10 * * *', // 10.0分执行一次
-      cron: '0 30 8 * * *', // 8.30分执行一次
+      cron: '0 10 8 * * *', // 8.10分执行一次
       // interval: '1m', // 1 分钟间隔
       type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
@@ -29,7 +29,7 @@ class CourseSchedule extends Subscription {
       return {
         touser: item.openId,
         template_id,
-        url: 'http://yangjin-art.top/platform',
+        // url: 'http://yangjin-art.top/platform',
         data: {
           first: {
             value: `您好,${item.stu_name}同学,你今天的课程安排来了`,
@@ -44,7 +44,7 @@ class CourseSchedule extends Subscription {
             color: '#1d1d1d',
           },
           remark: {
-            value: item.desc,
+            value: item.desc || '记得准时参加哦',
             color: '#173177',
           },
         },
@@ -55,8 +55,7 @@ class CourseSchedule extends Subscription {
     api.forEach(data => {
       ctx.service.wechat.sendTemplateMsg({ access_token, data });
     });
-    console.log('定时任务执行');
-    console.log('wechat 定时任务执行');
+    console.log('课程推送定时任务执行');
   }
 }
 
