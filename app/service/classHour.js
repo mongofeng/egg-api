@@ -10,7 +10,7 @@ class ClassHourService extends Service {
     // 更新学时统计表
     const { ctx } = this;
     const body = ctx.request.body;
-    const { type, num, amount = 0 } = body;
+    const { type, num, classTypes, amount = 0 } = body;
     const query = type === 1 ? { $inc: { num, amount } } : { $inc: { used: num } };
 
     const update = await ctx.model.StudentHour.update(
@@ -27,7 +27,7 @@ class ClassHourService extends Service {
     // 如果学时表更新成功，则添加流水
     if (update && update.n !== 0) {
       // 如果是扣除课时的话
-      if (type === 2) { // 如果是签到, 推送微信消息
+      if (type === 2 && classTypes === 3) { // 如果是签到, 推送微信消息
         const { access_token } = await ctx.service.wechat.wechatToken();
         const { template_id } = this.config.schedule.sign;
         const stu = await ctx.model.Student.findOne({
