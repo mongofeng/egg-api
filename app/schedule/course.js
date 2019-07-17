@@ -44,7 +44,7 @@ class CourseSchedule extends Subscription {
             color: '#1d1d1d',
           },
           remark: {
-            value: item.desc || '记得准时参加哦',
+            value: '记得准时参加哦',
             color: '#173177',
           },
         },
