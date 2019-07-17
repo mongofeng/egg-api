@@ -53,7 +53,7 @@ class ClassHourService extends Service {
           // 剩余总课时：19课时
           // 祝您生活愉快！
           const date = new Date();
-          const time = `${date.getFullYear}年${date.getMonth() + 1}月${date.getDate()}号`;
+          const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
           const query = {
             touser: stu.openId,
             template_id,
