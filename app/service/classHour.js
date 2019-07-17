@@ -11,6 +11,35 @@ class ClassHourService extends Service {
     const { ctx } = this;
     const body = ctx.request.body;
     const { type, num, classTypes, amount = 0 } = body;
+
+    // 判断课时是否足以扣除
+    if (type === 2) {
+      const user = await ctx.model.StudentHour.findOne(
+        { studentId: body.studentId }
+      );
+      if (!user) {
+        const errorMsg = {
+          code: 0,
+          msg: 'class hour is not exit!',
+          desc: '学生课时不存在',
+          data: user,
+        };
+        ctx.throw(400, errorMsg);
+      }
+
+      if ((user.num - user.used) < num) {
+        const errorMsg = {
+          code: 0,
+          msg: 'class hour is not dec!',
+          desc: '学生课时不足以扣除,请添加课时',
+          data: user,
+        };
+        ctx.throw(400, errorMsg);
+      }
+    }
+
+
+    // 更新统计表
     const query = type === 1 ? { $inc: { num, amount } } : { $inc: { used: num } };
 
     const update = await ctx.model.StudentHour.update(
@@ -21,7 +50,6 @@ class ClassHourService extends Service {
 
     const data = {
       student_hour: update,
-      templateMsg: '没有更新数据库成功',
     };
 
     // 如果学时表更新成功，则添加流水
@@ -71,7 +99,7 @@ class ClassHourService extends Service {
                 value: `${num}课时`,
               },
               keyword4: {
-                value: `${total.num}课时`,
+                value: `${total.num - total.used}课时`,
               },
               remark: {
                 value: '祝您生活愉快！',
@@ -79,10 +107,13 @@ class ClassHourService extends Service {
             },
           };
 
-          const res = await ctx.service.wechat.sendTemplateMsg({ access_token, query });
+          const res = await ctx.service.wechat.sendTemplateMsg({ access_token, data: query });
           data.templateMsg = res;
         } else {
-          data.templateMsg = stu ? '改学生还没绑定微信号' : '查询不到改学生';
+          data.templateMsg = {
+            errcode: 1,
+            errmsg: stu ? '改学生还没绑定微信号' : '查询不到改学生',
+          };
         }
       }
       data.class_hour = await ctx.model.ClassHour.create(body);
