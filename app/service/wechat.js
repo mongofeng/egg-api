@@ -53,7 +53,7 @@ class WechatService extends Service {
       // 明确告诉 HttpClient 以 JSON 格式处理返回的响应 body
       dataType: 'json',
     });
-    console.log('发送成功后的信息')
+    console.log('------------------------------发送成功后的信息-----------------------------------------------')
     console.log(result.data)
     return result.data;
   }
@@ -97,6 +97,8 @@ class WechatService extends Service {
       this.getformDatabase
     );
     const result = await fun(data);
+    console.log('------------------------------------token--------------------------------------')
+    console.log(result)
     // result.access_token = '23_yET7u-RIASKHw5mYcDcA0TeaMKdRwKlALACmAO72M41pbjR0EQj0IxOgpw-tM-cOsvkOuqZ6L3U5clg16P51rzgwBL2R_q_s0WYNyNFVh87wcHpIDNWAwWbNCJrpwmj9uyZECJdGvro6a_L0STNhAAAMNH';
     return result;
   }

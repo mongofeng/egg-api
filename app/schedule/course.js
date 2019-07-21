@@ -6,7 +6,7 @@ class CourseSchedule extends Subscription {
   static get schedule() {
     return {
       // cron: '0 0 10 * * *', // 10.0分执行一次
-      cron: '0 0 21 * * *', // 8.10分执行一次
+      cron: '0 0 21 * * *', // 21点分执行一次
       // interval: '1m', // 1 分钟间隔
       type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
@@ -24,7 +24,7 @@ class CourseSchedule extends Subscription {
 
 
     let myDate = new Date(); //获取今天日期
-
+    console.log('------------------------------时间-----------------------------------------------')
     console.log(myDate)
 
     // 获取1天后的日期
@@ -69,6 +69,7 @@ class CourseSchedule extends Subscription {
     });
     const { access_token } = await ctx.service.wechat.wechatToken();
     api.forEach(data => {
+      console.log('------------------------------data-----------------------------------------------')
       console.log(data)
       ctx.service.wechat.sendTemplateMsg({ access_token, data });
     });
