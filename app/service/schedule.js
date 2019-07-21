@@ -8,6 +8,9 @@ class ScheduleService extends Service {
     // 当天的课程
     const { ctx } = this;
     const nowDate = new Date();
+    // 获取1天后的日期
+    nowDate.setDate(myDate.getDate() + 1)
+    
     const time = nowDate.getTime();
     const data = await ctx.model.Course.aggregate([
       {

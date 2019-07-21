@@ -6,7 +6,7 @@ class CourseSchedule extends Subscription {
   static get schedule() {
     return {
       // cron: '0 0 10 * * *', // 10.0分执行一次
-      cron: '0 10 8 * * *', // 8.10分执行一次
+      cron: '0 0 12 * * *', // 8.10分执行一次
       // interval: '1m', // 1 分钟间隔
       type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
@@ -22,30 +22,45 @@ class CourseSchedule extends Subscription {
       3: '晚上',
     };
 
+
+    let myDate = new Date(); //获取今天日期
+
+    // 获取1天后的日期
+    myDate.setDate(myDate.getDate() + 1)
+    const WEEK = [
+      '星期日',
+      '星期一',
+      '星期二',
+      '星期三',
+      '星期四',
+      '星期五',
+      '星期六',
+    ]
+
+    const dateStr = `${myDate.getMonth() + 1}月${myDate.getDate()}日`
+
     const list = await ctx.service.schedule.fetchCurrentCourse();
-    console.log(list);
+
     const { template_id } = this.config.schedule.course;
     const api = list.map(item => {
+      const timeStr = `${dateStr}${WEEK[item.day]}`
+      const lastTimeStr = (item.endTime && item.startTime) ? `${timeStr}${item.startTime}-${item.endTime}` : `${timeStr}${DAY_LABEL[item.time]}`
       return {
         touser: item.openId,
         template_id,
         // url: 'http://yangjin-art.top/platform',
         data: {
           first: {
-            value: `您好,${item.stu_name}同学,你今天的课程安排来了`,
-            color: '#1d1d1d',
+            value: `您好,${item.stu_name}同学,提醒您画画啦`,
           },
           keyword1: {
             value: item.name,
-            color: '#173177',
           },
           keyword2: {
-            value: (item.endTime && item.startTime) ? `${item.startTime}-${item.endTime}` : DAY_LABEL[item.time],
-            color: '#1d1d1d',
+            value: lastTimeStr,
           },
           remark: {
             value: '记得准时参加哦',
-            color: '#173177',
           },
         },
       };
