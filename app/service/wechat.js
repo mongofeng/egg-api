@@ -53,6 +53,8 @@ class WechatService extends Service {
       // 明确告诉 HttpClient 以 JSON 格式处理返回的响应 body
       dataType: 'json',
     });
+    console.log('发送成功后的信息')
+    console.log(result.data)
     return result.data;
   }
 
