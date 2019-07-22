@@ -9,8 +9,8 @@ class ScheduleService extends Service {
     const { ctx } = this;
     const nowDate = new Date();
     // 获取1天后的日期
-    nowDate.setDate(nowDate.getDate() + 1)
-    
+    nowDate.setDate(nowDate.getDate() + 1);
+
     const time = nowDate.getTime();
     const data = await ctx.model.Course.aggregate([
       {
@@ -22,7 +22,9 @@ class ScheduleService extends Service {
             $gte: time,
           },
           status: 1,
-          day: nowDate.getDay(),
+          day: {
+            $in: [ nowDate.getDay() ],
+          },
         },
       },
       {
