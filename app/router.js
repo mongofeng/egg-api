@@ -16,6 +16,10 @@ module.exports = app => {
   router.resources('student', '/v1/student', controller.student);
   router.post('/v1/student/list', controller.student.list);
 
+  // 课程包
+  router.resources('classPackage', '/v1/student', controller.classPackage);
+  router.post('/v1/classPackage/list', controller.classPackage.list);
+
   // 课程
   router.resources('course', '/v1/course', controller.course);
   router.post('/v1/course/list', controller.course.list);

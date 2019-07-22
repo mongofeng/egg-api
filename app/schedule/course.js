@@ -23,7 +23,7 @@ class CourseSchedule extends Subscription {
     };
 
 
-    let myDate = new Date(); //获取今天日期
+    const myDate = new Date(); //获取今天日期
     console.log('------------------------------时间-----------------------------------------------')
     console.log(myDate)
 
