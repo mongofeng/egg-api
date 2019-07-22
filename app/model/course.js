@@ -1,25 +1,28 @@
 'use strict';
+/**
+ * 课程的数据
+ * @param app
+ * @returns {Model<Document> | Model<T>}
+ */
 module.exports = app => {
   const mongoose = app.mongoose;
-
-  // 姓名，老师，状态：开班，结束， 1/2 课程内容：‘’, 开课时间， 结课时间，创建时间，更新时间, day：1-7， time: 1/2/3
   const Schema = mongoose.Schema;
   const courseSchema = new Schema(
     {
-      name: {
+      name: { // 姓名
         type: String,
         required: true,
       },
-      teacherId: {
+      teacherId: { // 老师
         type: String,
         default: '',
         required: true,
       },
-      studentIds: {
+      studentIds: { // 学生
         type: [ String ],
         default: () => [],
       },
-      status: {
+      status: { // 状态：开班，结束， 1/2
         type: Number,
         default: 1,
         required: true,
@@ -28,29 +31,29 @@ module.exports = app => {
         type: String,
         default: '',
       },
-      day: {
+      day: { // day：1-7
+        type: [ Number ],
+        required: true,
+      },
+      time: { // 早中晚: 1/2/3
         type: Number,
         required: true,
       },
-      time: {
+      startDate: { // 开课时间
         type: Number,
         required: true,
       },
-      startDate: {
+      endDate: { // 结课时间
         type: Number,
-        default: 0,
+        required: true,
       },
-      endDate: {
-        type: Number,
-        default: 0,
-      },
-      startTime: {
+      startTime: { // 课堂开始时间
         type: String,
-        default: null,
+        required: true,
       },
-      endTime: {
+      endTime: { // 课堂结束时间
         type: String,
-        default: null,
+        required: true,
       },
     },
     {

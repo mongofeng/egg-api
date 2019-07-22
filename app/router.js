@@ -17,13 +17,13 @@ module.exports = app => {
   router.post('/v1/student/list', controller.student.list);
 
   // 课程包
-  router.resources('classPackage', '/v1/student', controller.classPackage);
+  router.resources('classPackage', '/v1/classPackage', controller.classPackage);
   router.post('/v1/classPackage/list', controller.classPackage.list);
 
 
-  // 课程包
-  router.resources('classPackage', '/v1/student', controller.classPackage);
-  router.post('/v1/classPackage/list', controller.classPackage.list);
+  // 课程包使用的统计
+  router.resources('studentPackage', '/v1/student', controller.studentPackage);
+  router.post('/v1/studentPackage/list', controller.studentPackage.list);
 
   // 课程
   router.resources('course', '/v1/course', controller.course);
