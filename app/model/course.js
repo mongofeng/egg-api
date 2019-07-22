@@ -2,7 +2,7 @@
 /**
  * 课程的数据
  * @param app
- * @returns {Model<Document> | Model<T>}
+ * @return {Model<Document> | Model<T>}
  */
 module.exports = app => {
   const mongoose = app.mongoose;
@@ -24,7 +24,6 @@ module.exports = app => {
       },
       status: { // 状态：开班，结束， 1/2
         type: Number,
-        default: 1,
         required: true,
       },
       desc: {

@@ -18,10 +18,10 @@ module.exports = app => {
       default: 1,
       required: true,
     },
-    age: {
-      type: Number,
-      required: true,
-    },
+    // age: {
+    //   type: Number,
+    //   required: true,
+    // },
     phone: {
       type: String,
       required: true,

@@ -3,7 +3,7 @@
 /**
  * 课时包内容
  * @param app
- * @returns {Model<Document> | Model<T>}
+ * @return {Model<Document> | Model<T>}
  */
 module.exports = app => {
   const mongoose = app.mongoose;
@@ -22,6 +22,10 @@ module.exports = app => {
       default: null,
     },
     amount: { // 价格
+      type: Number,
+      required: true,
+    },
+    period: { // 有效期
       type: Number,
       required: true,
     },
