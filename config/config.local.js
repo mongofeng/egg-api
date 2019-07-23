@@ -41,6 +41,9 @@ module.exports = appInfo => {
     sign: {
       template_id: 'yMWwcsc25qNY-24GYSD_KTvVbFIQFPLZuzzP_YyXTgM',
     },
+    package: {
+      template_id: 'JVkTSFKlbgG5I8OZ6EGW69X0shbkJPqHg0Zx9N4m5OM',
+    },
   };
 
   return config;

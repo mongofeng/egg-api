@@ -3,52 +3,6 @@
 const Service = require('egg').Service;
 
 class HourService extends Service {
-  // 查找课程包明细
-  async findPackage(packageId) {
-    const { ctx } = this;
-    const Package = await ctx.model.ClassPackage.findOne(
-      { _id: packageId }
-    );
-
-    if (!Package) {
-      const errorMsg = {
-        code: 0,
-        msg: 'Package is not exit!',
-        desc: '课程包不存在',
-        data: Package,
-      };
-      ctx.throw(400, errorMsg);
-    } else {
-      return Package;
-    }
-  }
-  // 关联课程包到学员,初次添加
-  async relatePackageToStu({ packageId, studentId, count }) {
-    const { ctx } = this;
-    const data = await ctx.model.studentPackage.create({
-      packageId,
-      studentId,
-      surplus: count,
-      used: 0,
-    });
-    // 关联成功
-    if (data) {
-      return data;
-    }
-    const errorMsg = {
-      code: 0,
-      msg: 'relate is not fail!',
-      desc: '关联课程包失败',
-      data,
-    };
-    ctx.throw(400, errorMsg);
-  }
-  // 创建课程流水
-  async createFlows(body) {
-    const { ctx } = this;
-    const result = await ctx.model.ClassHour.create(body);
-    return result;
-  }
   // 购买课程包,添加流水
   async buy() {
     const { ctx } = this;
@@ -80,6 +34,34 @@ class HourService extends Service {
       desc,
     });
 
+    // 4.推送微信消息
+    let templateMsg = {};
+    const stu = await this.findStudent(studentId);
+    if (stu && stu.openId) {
+      const date = new Date();
+      const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
+      const tem = {
+        first: `您好,${stu.name}同学,签到成功！`,
+        keyword1: time,
+        keyword2: '111',
+        remark: '祝您生活愉快！',
+      };
+      const { template_id } = this.config.schedule.package;
+      const params = {
+        touser: stu.openId,
+        template_id,
+        data: ctx.helper.formateTemplate(tem),
+      };
+
+      templateMsg = await this.pushWechatMessage(params);
+    } else {
+      templateMsg = {
+        errcode: 1,
+        errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
+      };
+    }
+
+
     // 添加课程的流水
     return {
       code: 1,
@@ -87,11 +69,92 @@ class HourService extends Service {
         classHour: result,
         package: Package,
         studentPackage: data,
+        templateMsg,
       },
       msg: 'insert success',
       desc: '添加成功',
     };
   }
+  // 查找学生的信息
+  async findStudent(studentId) {
+    const { ctx } = this;
+    const user = await ctx.model.Student.findOne({
+      _id: studentId,
+    });
+    if (user) {
+      return user;
+    }
+
+    const errorMsg = {
+      code: 0,
+      msg: 'student is not exit!',
+      desc: '学生不存在',
+      data: user,
+    };
+    ctx.throw(400, errorMsg);
+  }
+  // 查找课程包明细
+  async findPackage(packageId) {
+    const { ctx } = this;
+    const Package = await ctx.model.ClassPackage.findOne(
+      { _id: packageId }
+    );
+
+    if (!Package) {
+      const errorMsg = {
+        code: 0,
+        msg: 'Package is not exit!',
+        desc: '课程包不存在',
+        data: Package,
+      };
+      ctx.throw(400, errorMsg);
+    } else {
+      return Package;
+    }
+  }
+  // 关联学员课程包
+  async relatePackageToStu({ packageId, studentId, count }) {
+    const { ctx } = this;
+    const data = await ctx.model.studentPackage.create({
+      packageId,
+      studentId,
+      surplus: count,
+      used: 0,
+    });
+    // 关联成功
+    if (data) {
+      return data;
+    }
+    const errorMsg = {
+      code: 0,
+      msg: 'relate is not fail!',
+      desc: '关联课程包失败',
+      data,
+    };
+    ctx.throw(400, errorMsg);
+  }
+
+  // 查找学员课程包的明细
+  async findStudentPackage(id) {
+    const { ctx } = this;
+    const data = await ctx.model.studentPackage.find({
+      studentId: id,
+      isActive: true, // 激活的
+      surplus: { // 剩余学时大于0的
+        $gte: 0,
+      },
+    }).sort({
+      createDate: -1,
+    });
+    return data;
+  }
+  // 创建课程流水
+  async createFlows(body) {
+    const { ctx } = this;
+    const result = await ctx.model.ClassHour.create(body);
+    return result;
+  }
+
   // 推送微信的消息
   async pushWechatMessage(data) {
     const { ctx } = this;

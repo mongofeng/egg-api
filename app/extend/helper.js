@@ -73,12 +73,29 @@ function compose() {
   });
 }
 
+/**
+ *
+ * @param data
+ * @returns {{}}
+ */
+function formateTemplate(data) {
+  return Object.keys(data).reduce((initVal, key) => {
+    return {
+      ...initVal,
+      [key]: {
+        value: data[key],
+      },
+    };
+  }, {});
+}
+
 module.exports = {
   encrypt,
   validate,
   createToken,
   compose,
   parseXML,
+  formateTemplate,
 };
 
 
