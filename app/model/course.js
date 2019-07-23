@@ -28,7 +28,7 @@ module.exports = app => {
       },
       desc: {
         type: String,
-        default: '',
+        default: null,
       },
       day: { // day：1-7
         type: [ Number ],

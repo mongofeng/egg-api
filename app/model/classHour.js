@@ -1,50 +1,41 @@
 'use strict';
+/**
+ * 课时流水
+ * @param app
+ * @returns {Model<Document> | Model<T>}
+ */
 module.exports = app => {
   const mongoose = app.mongoose;
-
-  // 家长姓名，学员的id，课时的数量， 状态：通过1/2， 类型：添加/减少 1/2， 金钱, 学时的类型：购买/赠送1//2/签到/其他, 课时/教师的名称和id
   const Schema = mongoose.Schema;
   const ClassHour_col = new Schema({
-    name: {
-      type: String,
-      required: true,
-    },
-    num: {
+    num: { // 课时的数量
       type: Number,
       required: true,
     },
     courseId: {
-      type: String,
-      default: '',
+      type: String, // 课程id,补签或者签到时候存在
     },
-    teacherId: {
+    packageId: { // 课程包id
       type: String,
-      default: '',
     },
-    studentId: {
+    studentId: { // 学员的id
       type: String,
       required: true,
     },
-    type: {
+    type: { // 类型：添加/减少 1/2
       type: Number,
       required: true,
     },
-    classTypes: {
+    classTypes: { // 学时的类型：补签/签到 1/2
       type: Number,
-      default: 1,
     },
-    amount: {
-      type: Number,
-      default: 0,
-    },
-    status: {
-      type: Number,
-      default: 1,
-      required: true,
-    },
-    desc: {
+    // status: { // 通过：是/否 1/2, 保留字段
+    //   type: Number,
+    //   default: 1,
+    // },
+    desc: { // 描述
       type: String,
-      default: '',
+      default: null,
     },
   }, { collection: 'classHour', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
 
