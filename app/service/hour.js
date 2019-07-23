@@ -3,7 +3,10 @@
 const Service = require('egg').Service;
 
 class HourService extends Service {
-  // 购买课程包,添加流水
+
+  /**
+   * 购买
+   */
   async buy() {
     const { ctx } = this;
     const body = ctx.request.body;
@@ -38,6 +41,205 @@ class HourService extends Service {
     let templateMsg = {};
     const stu = await this.findStudent(studentId);
     if (stu && stu.openId) {
+      // {{first.DATA}}
+      // 上课日期：{{keyword1.DATA}}
+      // 班级名称：{{keyword2.DATA}}
+      // 本次扣课时：{{keyword3.DATA}}
+      // 剩余总课时：{{keyword4.DATA}}
+      // {{remark.DATA}}
+      const date = new Date();
+      const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
+      const tem = {
+        first: `您好,${stu.name}同学,签到成功！`,
+        keyword1: time,
+        keyword2: '111',
+        keyword3: '',
+        keyword4: '',
+        remark: '祝您生活愉快！',
+      };
+      const { template_id } = this.config.schedule.package;
+      const params = {
+        touser: stu.openId,
+        template_id,
+        data: ctx.helper.formateTemplate(tem),
+      };
+
+      templateMsg = await this.pushWechatMessage(params);
+    } else {
+      templateMsg = {
+        errcode: 1,
+        errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
+      };
+    }
+
+
+    return {
+      code: 1,
+      data: {
+        classHour: result,
+        package: Package,
+        studentPackage: data,
+        templateMsg,
+      },
+      msg: 'insert success',
+      desc: '添加成功',
+    };
+  }
+
+  /**
+   * 签到
+   */
+  async sign() {
+    // $inc在原基础上更改：https://docs.mongodb.com/manual/reference/operator/update/inc/#up._S_inc
+    const { ctx } = this;
+    const body = ctx.request.body;
+    const { studentId, course, num, desc = '', courseName } = body;
+
+    const query = {
+      studentId,
+      isActive: true, // 激活的
+      surplus: { // 剩余学时大于0的
+        $gte: num,
+      },
+    };
+
+    // 1.查找课时包
+    const packages = await this.findStudentPackage(query);
+
+    // 2.更新package包里面的课时
+    const params = {
+      $inc: {
+        surplus: -num,
+        used: num },
+    };
+    const update = await this.updateStudentPackage({
+      _id: packages._id,
+    }, params);
+
+    // 3.添加一个流水
+    // num:  // 课时的数量
+    // course:  // 课程id,补签或者签到时候存在 {courseId, count}
+    // packageId?:  // 课程包id
+    // studentId: // 学员的id
+    // type // 类型：添加/减少 1/2
+    // classTypes:// 学时的类型：补签/签到 1/2
+    // desc:  // 描述
+
+    // 3.创建课程的流水
+    const result = await this.createFlows({
+      num,
+      course,
+      type: 2,
+      classTypes: 2,
+      studentId,
+      desc,
+    });
+
+
+    // 4.推送微信消息
+    let templateMsg = {};
+    const stu = await this.findStudent(studentId);
+    if (stu && stu.openId) {
+      // {{first.DATA}}
+      // 上课日期：{{keyword1.DATA}}
+      // 班级名称：{{keyword2.DATA}}
+      // 本次扣课时：{{keyword3.DATA}}
+      // 剩余总课时：{{keyword4.DATA}}
+      // {{remark.DATA}}
+      const date = new Date();
+      const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
+      const tem = {
+        first: `您好,${stu.name}同学,签到成功！`,
+        keyword1: time,
+        keyword2: courseName,
+        keyword3: `${num}课时`,
+        keyword4: `${packages.surplus - num}课时`,
+        remark: '祝您生活愉快！',
+      };
+      const { template_id } = this.config.schedule.package;
+      const params = {
+        touser: stu.openId,
+        template_id,
+        data: ctx.helper.formateTemplate(tem),
+      };
+
+      templateMsg = await this.pushWechatMessage(params);
+    } else {
+      templateMsg = {
+        errcode: 1,
+        errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
+      };
+    }
+
+
+    return {
+      code: 1,
+      data: {
+        classHour: result,
+        package: packages,
+        studentPackage: update,
+        templateMsg,
+      },
+      msg: 'insert success',
+      desc: '添加成功',
+    };
+
+  }
+
+  /**
+   * 补签
+   */
+  async supplement() {
+    const { ctx } = this;
+    const body = ctx.request.body;
+    const { studentId, course, num, desc = '' } = body;
+
+    const query = {
+      studentId,
+      isActive: true, // 激活的
+      surplus: { // 剩余学时大于0的
+        $gte: num,
+      },
+    };
+
+    // 1.查找课时包
+    const packages = await this.findStudentPackage(query);
+
+    // 2.更新package包里面的课时
+    const params = {
+      $inc: {
+        surplus: -num,
+        used: num },
+    };
+    const update = await this.updateStudentPackage({
+      _id: packages._id,
+    }, params);
+
+    // 3.添加一个流水
+    // num:  // 课时的数量
+    // course:  // 课程id,补签或者签到时候存在
+    // packageId?:  // 课程包id
+    // studentId: // 学员的id
+    // type // 类型：添加/减少 1/2
+    // classTypes:// 学时的类型：补签/签到 1/2
+    // desc:  // 描述
+
+    // 3.创建课程的流水
+
+    const result = await this.createFlows({
+      num,
+      course,
+      type: 2,
+      classTypes: 1,
+      studentId,
+      desc,
+    });
+
+
+    // 4.推送微信消息
+    let templateMsg = {};
+    const stu = await this.findStudent(studentId);
+    if (stu && stu.openId) {
       const date = new Date();
       const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
       const tem = {
@@ -62,19 +264,20 @@ class HourService extends Service {
     }
 
 
-    // 添加课程的流水
     return {
       code: 1,
       data: {
         classHour: result,
-        package: Package,
-        studentPackage: data,
+        package: packages,
+        studentPackage: update,
         templateMsg,
       },
       msg: 'insert success',
       desc: '添加成功',
     };
   }
+
+
   // 查找学生的信息
   async findStudent(studentId) {
     const { ctx } = this;
@@ -93,7 +296,9 @@ class HourService extends Service {
     };
     ctx.throw(400, errorMsg);
   }
-  // 查找课程包明细
+
+
+  // 查找课程包
   async findPackage(packageId) {
     const { ctx } = this;
     const Package = await ctx.model.ClassPackage.findOne(
@@ -112,6 +317,7 @@ class HourService extends Service {
       return Package;
     }
   }
+
   // 关联学员课程包
   async relatePackageToStu({ packageId, studentId, count }) {
     const { ctx } = this;
@@ -119,6 +325,7 @@ class HourService extends Service {
       packageId,
       studentId,
       surplus: count,
+      count,
       used: 0,
     });
     // 关联成功
@@ -135,19 +342,45 @@ class HourService extends Service {
   }
 
   // 查找学员课程包的明细
-  async findStudentPackage(id) {
+  async findStudentPackage(query) {
     const { ctx } = this;
-    const data = await ctx.model.studentPackage.find({
-      studentId: id,
-      isActive: true, // 激活的
-      surplus: { // 剩余学时大于0的
-        $gte: 0,
-      },
-    }).sort({
+    const data = await ctx.model.studentPackage.findOne(query).sort({
       createDate: -1,
     });
-    return data;
+    if (data) {
+      return data;
+    }
+    const errorMsg = {
+      code: 0,
+      msg: 'find package is fail!',
+      desc: '查找学员课程包的明细失败',
+      data,
+    };
+    ctx.throw(400, errorMsg);
   }
+
+  // 更新学员课程包的数量
+  async updateStudentPackage(query, params) {
+    const { ctx } = this;
+    const data = await ctx.model.studentPackage.updateOne(
+      query,
+      params
+    );
+    // data.n; // Number of documents matched
+    // data.nModified; // Number of documents modified
+    if (data.n && data.nModified) {
+      return data;
+    }
+    const errorMsg = {
+      code: 0,
+      msg: 'update package is fail!',
+      desc: '更新学员课程包的明细失败',
+      data,
+    };
+    ctx.throw(400, errorMsg);
+  }
+
+
   // 创建课程流水
   async createFlows(body) {
     const { ctx } = this;
@@ -160,132 +393,9 @@ class HourService extends Service {
     const { ctx } = this;
     const { access_token } = await ctx.service.wechat.wechatToken();
     const res = await ctx.service.wechat.sendTemplateMsg({ access_token, data });
-    return res
+    return res;
   }
 
-  async add() {
-    // $inc在原基础上更改：https://docs.mongodb.com/manual/reference/operator/update/inc/#up._S_inc
-    // https://docs.mongodb.com/manual/reference/operator/update/inc/#up._S_inc
-
-    // 更新学时统计表
-    const { ctx } = this;
-    const body = ctx.request.body;
-    const { type, num, classTypes, amount = 0 } = body;
-
-    // 判断课时是否足以扣除
-    if (type === 2) {
-      const user = await ctx.model.StudentHour.findOne(
-        { studentId: body.studentId }
-      );
-      if (!user) {
-        const errorMsg = {
-          code: 0,
-          msg: 'class hour is not exit!',
-          desc: '学生课时不存在',
-          data: user,
-        };
-        ctx.throw(400, errorMsg);
-      }
-
-      if ((user.num - user.used) < num) {
-        const errorMsg = {
-          code: 0,
-          msg: 'class hour is not dec!',
-          desc: '学生课时不足以扣除,请添加课时',
-          data: user,
-        };
-        ctx.throw(400, errorMsg);
-      }
-    }
-
-
-    // 更新统计表
-    const query = type === 1 ? { $inc: { num, amount } } : { $inc: { used: num } };
-
-    const update = await ctx.model.StudentHour.update(
-      { studentId: body.studentId },
-      query,
-      { upsert: false, multi: false }
-    );
-
-    const data = {
-      student_hour: update,
-    };
-
-    // 如果学时表更新成功，则添加流水
-    if (update && update.n !== 0) {
-      // 如果是扣除课时的话
-      if (type === 2 && classTypes === 3) { // 如果是签到, 推送微信消息
-        const { access_token } = await ctx.service.wechat.wechatToken();
-        const { template_id } = this.config.schedule.sign;
-        const stu = await ctx.model.Student.findOne({
-          _id: body.studentId,
-        });
-
-        const total = await ctx.model.StudentHour.findOne({
-          studentId: body.studentId,
-        });
-
-        if (stu && stu.openId) {
-          // {{first.DATA}}
-          // 上课日期：{{keyword1.DATA}}
-          // 班级名称：{{keyword2.DATA}}
-          // 本次扣课时：{{keyword3.DATA}}
-          // 剩余总课时：{{keyword4.DATA}}
-          // {{remark.DATA}}
-
-          // 你好，恭喜您签到成功！
-          // 上课日期：2017年11月10号
-          // 班级名称：音乐课
-          // 本次扣课时：1课时
-          // 剩余总课时：19课时
-          // 祝您生活愉快！
-          const date = new Date();
-          const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
-          const query = {
-            touser: stu.openId,
-            template_id,
-            data: {
-              first: {
-                value: `您好,${stu.name}同学,签到成功！`,
-              },
-              keyword1: {
-                value: time,
-              },
-              keyword2: {
-                value: body.course,
-              },
-              keyword3: {
-                value: `${num}课时`,
-              },
-              keyword4: {
-                value: `${total.num - total.used}课时`,
-              },
-              remark: {
-                value: '祝您生活愉快！',
-              },
-            },
-          };
-
-          const res = await ctx.service.wechat.sendTemplateMsg({ access_token, data: query });
-          data.templateMsg = res;
-        } else {
-          data.templateMsg = {
-            errcode: 1,
-            errmsg: stu ? '改学生还没绑定微信号' : '查询不到改学生',
-          };
-        }
-      }
-      data.class_hour = await ctx.model.ClassHour.create(body);
-    }
-
-    return {
-      code: 1,
-      msg: 'insert success',
-      data,
-      desc: '添加成功',
-    };
-  }
 }
 
 module.exports = HourService;

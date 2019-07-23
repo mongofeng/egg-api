@@ -2,7 +2,7 @@
 /**
  * 课时流水
  * @param app
- * @returns {Model<Document> | Model<T>}
+ * @return {Model<Document> | Model<T>}
  */
 module.exports = app => {
   const mongoose = app.mongoose;
@@ -12,8 +12,8 @@ module.exports = app => {
       type: Number,
       required: true,
     },
-    courseId: {
-      type: String, // 课程id,补签或者签到时候存在
+    course: {
+      type: [{}], // 课程id,补签或者签到时候存在{courseId, count}
     },
     packageId: { // 课程包id
       type: String,

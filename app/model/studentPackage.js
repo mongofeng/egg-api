@@ -19,11 +19,15 @@ module.exports = app => {
       type: Date,
       default: null,
     },
-    surplus: { // 剩余课时
+    count: { // 总数量
       type: Number,
       required: true,
     },
-    used: { // 使用课时
+    surplus: { // 剩余课时, change改变
+      type: Number,
+      required: true,
+    },
+    used: { // 使用课时， change改变
       type: Number,
       required: true,
     },
