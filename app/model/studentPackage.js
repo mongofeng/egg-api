@@ -19,6 +19,10 @@ module.exports = app => {
       type: Date,
       default: null,
     },
+    amount: { // 价格
+      type: Number,
+      required: true,
+    },
     count: { // 总数量
       type: Number,
       required: true,

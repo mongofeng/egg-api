@@ -14,11 +14,14 @@ class HourService extends Service {
     // 1.查询课程包的状态
     const Package = await this.findPackage(packageId);
     // 2.关联课程包
-    const { count } = Package;
+    const { count, amount } = Package;
     const data = await this.relatePackageToStu({
       packageId,
       studentId,
+      surplus: count,
       count,
+      used: 0,
+      amount,
     });
     // num:  // 课时的数量
     // courseId?:  // 课程id,补签或者签到时候存在
@@ -319,15 +322,9 @@ class HourService extends Service {
   }
 
   // 关联学员课程包
-  async relatePackageToStu({ packageId, studentId, count }) {
+  async relatePackageToStu(params) {
     const { ctx } = this;
-    const data = await ctx.model.studentPackage.create({
-      packageId,
-      studentId,
-      surplus: count,
-      count,
-      used: 0,
-    });
+    const data = await ctx.model.studentPackage.create(params);
     // 关联成功
     if (data) {
       return data;
