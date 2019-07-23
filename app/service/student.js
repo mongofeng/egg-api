@@ -4,29 +4,6 @@ const Service = require('egg').Service;
 
 class StudentService extends Service {
   /**
-   * 新建学员
-   */
-  async add() {
-    const { ctx } = this;
-    const body = ctx.request.body;
-    // 新建学生
-    const data = await ctx.model.Student.create(body);
-    const insertParmas = {
-      studentId: data._id,
-      num: 0, // 学时
-      used: 0, // 剩余学时
-    };
-    // 新建学时统计表
-    await ctx.model.StudentHour.create(insertParmas);
-    return {
-      code: 1,
-      msg: 'insert success',
-      data,
-      desc: '添加成功',
-    };
-  }
-
-  /**
  * 根据创建时间统计学生的个数
  */
   async caculateStudentByMonth() {

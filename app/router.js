@@ -37,9 +37,6 @@ module.exports = app => {
   router.resources('class-hour', '/v1/class-hour', controller.classHour);
   router.post('/v1/class-hour/list', controller.classHour.list);
 
-  // 学时
-  router.post('/v1/student-hour/list', controller.studentHour.list);
-  router.get('/v1/student-hour/:id', controller.studentHour.show);
 
   // 当前用户信息
   router.get('/v1/user/userInfo', controller.user.fetchUserInfo);
@@ -73,7 +70,4 @@ module.exports = app => {
   // router.resources('class-hour', '/v1/class-hour', controller.classHour);
   router.post('/wechat/class-hour/list', controller.classHour.list);
 
-  // 学时
-  // router.post('/wechat/student-hour/list', controller.studentHour.list);
-  router.get('/wechat/student-hour/:id', controller.studentHour.show);
 };
