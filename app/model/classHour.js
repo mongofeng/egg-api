@@ -13,7 +13,7 @@ module.exports = app => {
       required: true,
     },
     course: {
-      type: [{}], // 课程id,补签或者签到时候存在{courseId, count}
+      type: [{}], // 课程,补签或者签到时候存在[{courseId, count}]
     },
     packageId: { // 课程包id
       type: String,
@@ -22,17 +22,10 @@ module.exports = app => {
       type: String,
       required: true,
     },
-    type: { // 类型：添加/减少 1/2
+    type: { // 类型：添加/补签/签到 1/2/3
       type: Number,
       required: true,
     },
-    classTypes: { // 学时的类型：补签/签到 1/2
-      type: Number,
-    },
-    // status: { // 通过：是/否 1/2, 保留字段
-    //   type: Number,
-    //   default: 1,
-    // },
     desc: { // 描述
       type: String,
       default: null,

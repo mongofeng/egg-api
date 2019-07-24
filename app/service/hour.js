@@ -17,18 +17,17 @@ class HourService extends Service {
     const { count, amount } = Package;
     const data = await this.relatePackageToStu({
       packageId,
-      studentId,
+      studentIds: [ studentId ],
       surplus: count,
       count,
       used: 0,
       amount,
     });
     // num:  // 课时的数量
-    // courseId?:  // 课程id,补签或者签到时候存在
+    // course?:  // 课程,补签或者签到时候存在[{courseId, count}]
     // packageId:  // 课程包id
     // studentId: // 学员的id
-    // type // 类型：添加/减少 1/2
-    // classTypes?:// 学时的类型：补签/签到 1/2
+    // type // 类型：添加/补签/签到  1/2/3
     // desc:  // 描述
 
     // 3.创建课程的流水
@@ -99,7 +98,9 @@ class HourService extends Service {
     const { studentId, course, num, desc = '', courseName } = body;
 
     const query = {
-      studentId,
+      studentIds: {
+        $in: [ studentId ],
+      },
       isActive: true, // 激活的
       surplus: { // 剩余学时大于0的
         $gte: num,
@@ -121,19 +122,17 @@ class HourService extends Service {
 
     // 3.添加一个流水
     // num:  // 课时的数量
-    // course:  // 课程id,补签或者签到时候存在 {courseId, count}
+    // course:  // 课程,补签或者签到时候存在[{courseId, count}]
     // packageId?:  // 课程包id
     // studentId: // 学员的id
-    // type // 类型：添加/减少 1/2
-    // classTypes:// 学时的类型：补签/签到 1/2
+    // type // 类型：添加/补签/签到  1/2/3
     // desc:  // 描述
 
     // 3.创建课程的流水
     const result = await this.createFlows({
       num,
       course,
-      type: 2,
-      classTypes: 2,
+      type: 3,
       studentId,
       desc,
     });
@@ -198,7 +197,9 @@ class HourService extends Service {
     const { studentId, course, num, desc = '' } = body;
 
     const query = {
-      studentId,
+      studentIds: {
+        $in: [ studentId ],
+      },
       isActive: true, // 激活的
       surplus: { // 剩余学时大于0的
         $gte: num,
@@ -220,20 +221,17 @@ class HourService extends Service {
 
     // 3.添加一个流水
     // num:  // 课时的数量
-    // course:  // 课程id,补签或者签到时候存在
+    // course:  // 课程,补签或者签到时候存在[{courseId, count}]
     // packageId?:  // 课程包id
     // studentId: // 学员的id
-    // type // 类型：添加/减少 1/2
-    // classTypes:// 学时的类型：补签/签到 1/2
+    // type // 类型：添加/补签/签到  1/2/3
     // desc:  // 描述
 
     // 3.创建课程的流水
-
     const result = await this.createFlows({
       num,
       course,
       type: 2,
-      classTypes: 1,
       studentId,
       desc,
     });
@@ -271,6 +269,74 @@ class HourService extends Service {
       code: 1,
       data: {
         classHour: result,
+        package: packages,
+        studentPackage: update,
+        templateMsg,
+      },
+      msg: 'insert success',
+      desc: '添加成功',
+    };
+  }
+
+  /**
+   * 关联现有的学员包(多人共用一个包的情况)
+   * @returns {Promise<{msg: string, code: number, data: {package: *, studentPackage: *, classHour: null, templateMsg}, desc: string}>}
+   */
+  async sharePackage () {
+    const { ctx } = this;
+    const body = ctx.request.body;
+    const { packId, studentId } = body;
+    const query = {
+      _id: packId,
+    };
+
+    // 1.查找课时包
+    const packages = await this.findStudentPackage(query);
+    // 2.关联现有的学员包(多人共用一个包的情况)
+    const params = {
+      $addToSet: { studentIds: studentId }
+    };
+    const update = await this.updateStudentPackage({
+      _id: packages._id,
+    }, params);
+
+    // 4.推送微信消息
+    let templateMsg = {};
+    const stu = await this.findStudent(studentId);
+    if (stu && stu.openId) {
+      // {{first.DATA}}
+      // 上课日期：{{keyword1.DATA}}
+      // 班级名称：{{keyword2.DATA}}
+      // 本次扣课时：{{keyword3.DATA}}
+      // 剩余总课时：{{keyword4.DATA}}
+      // {{remark.DATA}}
+      const date = new Date();
+      const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
+      const tem = {
+        first: `您好,${stu.name}同学,签到成功！`,
+        keyword1: time,
+        remark: '祝您生活愉快！',
+      };
+      const { template_id } = this.config.schedule.package;
+      const params = {
+        touser: stu.openId,
+        template_id,
+        data: ctx.helper.formateTemplate(tem),
+      };
+
+      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
+    } else {
+      templateMsg = {
+        errcode: 1,
+        errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
+      };
+    }
+
+
+    return {
+      code: 1,
+      data: {
+        classHour: null,
         package: packages,
         studentPackage: update,
         templateMsg,
@@ -337,6 +403,7 @@ class HourService extends Service {
     };
     ctx.throw(400, errorMsg);
   }
+
 
   // 查找学员课程包的明细
   async findStudentPackage(query) {

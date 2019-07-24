@@ -3,8 +3,8 @@ module.exports = app => {
   const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
   const StudentPackage = new Schema({
-    studentId: { // 学生
-      type: String,
+    studentIds: { // 学生
+      type: [ String ],
       required: true,
     },
     packageId: { // 课程包id
