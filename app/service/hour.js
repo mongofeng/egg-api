@@ -67,7 +67,7 @@ class HourService extends Service {
         data: ctx.helper.formateTemplate(tem),
       };
 
-      templateMsg = await this.pushWechatMessage(params);
+      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
     } else {
       templateMsg = {
         errcode: 1,
@@ -166,7 +166,7 @@ class HourService extends Service {
         data: ctx.helper.formateTemplate(tem),
       };
 
-      templateMsg = await this.pushWechatMessage(params);
+      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
     } else {
       templateMsg = {
         errcode: 1,
@@ -258,7 +258,7 @@ class HourService extends Service {
         data: ctx.helper.formateTemplate(tem),
       };
 
-      templateMsg = await this.pushWechatMessage(params);
+      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
     } else {
       templateMsg = {
         errcode: 1,
@@ -384,15 +384,6 @@ class HourService extends Service {
     const result = await ctx.model.ClassHour.create(body);
     return result;
   }
-
-  // 推送微信的消息
-  async pushWechatMessage(data) {
-    const { ctx } = this;
-    const { access_token } = await ctx.service.wechat.wechatToken();
-    const res = await ctx.service.wechat.sendTemplateMsg({ access_token, data });
-    return res;
-  }
-
 }
 
 module.exports = HourService;

@@ -150,6 +150,14 @@ class WechatService extends Service {
       msg: '没有更新token,直接在数据库里面拿的',
     };
   }
+
+
+  // 推送微信的消息
+  async pushWechatMessage(data) {
+    const { access_token } = await this.wechatToken();
+    const res = await this.sendTemplateMsg({ access_token, data });
+    return res;
+  }
 }
 
 module.exports = WechatService;
