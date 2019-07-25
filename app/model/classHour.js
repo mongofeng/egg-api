@@ -18,6 +18,9 @@ module.exports = app => {
     packageId: { // 课程包id
       type: String,
     },
+    studentPackageId: { // 学员课程包id
+      type: String,
+    },
     studentId: { // 学员的id
       type: String,
       required: true,

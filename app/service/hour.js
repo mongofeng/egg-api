@@ -34,6 +34,7 @@ class HourService extends Service {
     const result = await this.createFlows({
       num: count,
       packageId,
+      studentPackageId: data._id,
       type: 1,
       studentId,
       desc,
@@ -132,6 +133,7 @@ class HourService extends Service {
     const result = await this.createFlows({
       num,
       course,
+      studentPackageId: packages._id,
       type: 3,
       studentId,
       desc,
@@ -231,6 +233,7 @@ class HourService extends Service {
     const result = await this.createFlows({
       num,
       course,
+      studentPackageId: packages._id,
       type: 2,
       studentId,
       desc,
@@ -294,7 +297,7 @@ class HourService extends Service {
     const packages = await this.findStudentPackage(query);
     // 2.关联现有的学员包(多人共用一个包的情况)
     const params = {
-      $addToSet: { studentIds: studentId }
+      $addToSet: { studentIds: studentId },
     };
     const update = await this.updateStudentPackage({
       _id: packages._id,
