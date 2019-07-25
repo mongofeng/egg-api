@@ -283,9 +283,9 @@ class HourService extends Service {
 
   /**
    * 关联现有的学员包(多人共用一个包的情况)
-   * @returns {Promise<{msg: string, code: number, data: {package: *, studentPackage: *, classHour: null, templateMsg}, desc: string}>}
+   * @return {Promise<{msg: string, code: number, data: {package: *, studentPackage: *, classHour: null, templateMsg}, desc: string}>}
    */
-  async sharePackage () {
+  async sharePackage() {
     const { ctx } = this;
     const body = ctx.request.body;
     const { packId, studentId } = body;
@@ -451,7 +451,7 @@ class HourService extends Service {
   // 创建课程流水
   async createFlows(body) {
     const { ctx } = this;
-    const result = await ctx.model.ClassHour.create(body);
+    const result = await ctx.model.CourseHourFlow.create(body);
     return result;
   }
 }

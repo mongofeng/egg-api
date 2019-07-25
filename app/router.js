@@ -5,6 +5,7 @@
  */
 module.exports = app => {
   const { router, controller } = app;
+  // student-package: studentPackage
   router.post('/v1/auth/register', controller.auth.register);
   router.post('/v1/auth/login', controller.auth.login);
 
@@ -17,8 +18,8 @@ module.exports = app => {
   router.post('/v1/student/list', controller.student.list);
 
   // 课程包
-  router.resources('classPackage', '/v1/classPackage', controller.package);
-  router.post('/v1/classPackage/list', controller.package.list);
+  router.resources('package', '/v1/package', controller.package);
+  router.post('/v1/package/list', controller.package.list);
 
 
   // 课程包使用的统计
@@ -34,8 +35,8 @@ module.exports = app => {
 
 
   // 课时
-  router.resources('class-hour', '/v1/class-hour', controller.classHour);
-  router.post('/v1/class-hour/list', controller.classHour.list);
+  router.resources('course-hour-flow', '/v1/course-hour-flow', controller.CourseHourFlow);
+  router.post('/v1/course-hour-flow/list', controller.CourseHourFlow.list);
 
 
   // 当前用户信息
@@ -63,11 +64,9 @@ module.exports = app => {
   router.post('/wechat/student/list', controller.student.list);
 
   // 课程
-  //  router.resources('course', '/wechat/course', controller.course);
   router.post('/wechat/course/list', controller.course.list);
 
   // 课时
-  // router.resources('class-hour', '/v1/class-hour', controller.classHour);
-  router.post('/wechat/class-hour/list', controller.classHour.list);
+  router.post('/wechat/course-hour-flow/list', controller.CourseHourFlow.list);
 
 };

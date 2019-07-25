@@ -163,7 +163,7 @@ class StatisticsService extends Service {
       poline.unshift(match);
     }
 
-    const data = await ctx.model.ClassHour.aggregate(poline);
+    const data = await ctx.model.CourseHourFlow.aggregate(poline);
 
     return {
       code: 1,
