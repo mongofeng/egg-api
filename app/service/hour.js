@@ -373,7 +373,7 @@ class HourService extends Service {
   // 查找课程包
   async findPackage(packageId) {
     const { ctx } = this;
-    const Package = await ctx.model.ClassPackage.findOne(
+    const Package = await ctx.model.Package.findOne(
       { _id: packageId }
     );
 

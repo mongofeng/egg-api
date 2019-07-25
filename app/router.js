@@ -17,8 +17,8 @@ module.exports = app => {
   router.post('/v1/student/list', controller.student.list);
 
   // 课程包
-  router.resources('classPackage', '/v1/classPackage', controller.classPackage);
-  router.post('/v1/classPackage/list', controller.classPackage.list);
+  router.resources('classPackage', '/v1/classPackage', controller.package);
+  router.post('/v1/classPackage/list', controller.package.list);
 
 
   // 课程包使用的统计

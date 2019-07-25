@@ -6,7 +6,7 @@ class ClassPackageController extends Controller {
   // post列表   student/list
   async list() {
     const { ctx } = this;
-    const result = await ctx.service.baseResful.list(ctx.model.ClassPackage);
+    const result = await ctx.service.baseResful.list(ctx.model.Package);
     ctx.status = 200;
     ctx.body = result;
   }
@@ -14,7 +14,7 @@ class ClassPackageController extends Controller {
   // post：增   student
   async create() {
     const { ctx } = this;
-    const result = await ctx.service.baseResful.add(ctx.model.ClassPackage);
+    const result = await ctx.service.baseResful.add(ctx.model.Package);
     ctx.status = 200;
     ctx.body = result;
   }
@@ -22,7 +22,7 @@ class ClassPackageController extends Controller {
   // get：查   student/:id
   async show() {
     const { ctx } = this;
-    const result = await ctx.service.baseResful.detail(ctx.model.ClassPackage);
+    const result = await ctx.service.baseResful.detail(ctx.model.Package);
     ctx.status = 200;
     ctx.body = result;
   }
@@ -30,7 +30,7 @@ class ClassPackageController extends Controller {
   // put：改   student/:id
   async update() {
     const { ctx } = this;
-    const result = await ctx.service.baseResful.update(ctx.model.ClassPackage);
+    const result = await ctx.service.baseResful.update(ctx.model.Package);
     ctx.status = 200;
     ctx.body = result;
   }
@@ -38,7 +38,7 @@ class ClassPackageController extends Controller {
   // delete：删   student/:id
   async destroy() {
     const { ctx } = this;
-    const result = await ctx.service.baseResful.del(ctx.model.ClassPackage);
+    const result = await ctx.service.baseResful.del(ctx.model.Package);
     ctx.status = 200;
     ctx.body = result;
   }

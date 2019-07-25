@@ -8,7 +8,7 @@
 module.exports = app => {
   const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
-  const ClassPackage = new Schema({
+  const Package = new Schema({
     name: { // 名字
       type: String,
       required: true,
@@ -32,5 +32,5 @@ module.exports = app => {
   }, { collection: 'class-package', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
 
 
-  return mongoose.model('class-package', ClassPackage);
+  return mongoose.model('class-package', Package);
 };
