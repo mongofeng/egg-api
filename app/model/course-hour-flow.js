@@ -7,7 +7,7 @@
 module.exports = app => {
   const mongoose = app.mongoose;
   const Schema = mongoose.Schema;
-  const ClassHour_col = new Schema({
+  const courseHourFlow_col = new Schema({
     num: { // 课时的数量
       type: Number,
       required: true,
@@ -33,8 +33,8 @@ module.exports = app => {
       type: String,
       default: null,
     },
-  }, { collection: 'classHour', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
+  }, { collection: 'course-hour-flow', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
 
 
-  return mongoose.model('classHour', ClassHour_col);
+  return mongoose.model('courseHourFlow', courseHourFlow_col);
 };

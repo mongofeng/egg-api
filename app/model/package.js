@@ -29,8 +29,8 @@ module.exports = app => {
       type: Number,
       required: true,
     },
-  }, { collection: 'class-package', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
+  }, { collection: 'package', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
 
 
-  return mongoose.model('class-package', Package);
+  return mongoose.model('package', Package);
 };
