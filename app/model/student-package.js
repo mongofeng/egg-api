@@ -43,6 +43,10 @@ module.exports = app => {
       type: Boolean, // 是否过时
       default: false,
     },
+    period: { // 有效期
+      type: Number,
+      required: true,
+    },
     isPush: {
       type: Boolean, // 是否推送过期的通知
       default: false,

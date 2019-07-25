@@ -22,7 +22,7 @@ module.exports = app => {
 
 
   // 课程包使用的统计
-  router.resources('student-package', '/v1/student', controller.studentPackage);
+  router.resources('student-package', '/v1/student-package', controller.studentPackage);
   router.post('/v1/student-package/list', controller.studentPackage.list);
 
   // 课程
