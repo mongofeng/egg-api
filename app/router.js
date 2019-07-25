@@ -9,7 +9,6 @@ module.exports = app => {
   router.post('/v1/auth/register', controller.auth.register);
   router.post('/v1/auth/login', controller.auth.login);
 
-  // 通过 app.resources 方法，我们将 teacher 这个资源的增删改查接口映射到了 app/controller/teacher.js 文件
   router.resources('teacher', '/v1/teacher', controller.teacher);
   router.post('/v1/teacher/list', controller.teacher.list);
 
@@ -23,8 +22,8 @@ module.exports = app => {
 
 
   // 课程包使用的统计
-  router.resources('studentPackage', '/v1/student', controller.studentPackage);
-  router.post('/v1/studentPackage/list', controller.studentPackage.list);
+  router.resources('student-package', '/v1/student', controller.studentPackage);
+  router.post('/v1/student-package/list', controller.studentPackage.list);
 
   // 课程
   router.resources('course', '/v1/course', controller.course);
@@ -35,8 +34,8 @@ module.exports = app => {
 
 
   // 课时
-  router.resources('course-hour-flow', '/v1/course-hour-flow', controller.CourseHourFlow);
-  router.post('/v1/course-hour-flow/list', controller.CourseHourFlow.list);
+  router.resources('course-hour-flow', '/v1/course-hour-flow', controller.courseHourFlow);
+  router.post('/v1/course-hour-flow/list', controller.courseHourFlow.list);
 
 
   // 当前用户信息
@@ -46,6 +45,12 @@ module.exports = app => {
   router.post('/v1/statistics/stuCountByTime', controller.statistics.stuCountByTime);
   router.post('/v1/statistics/stuCountByStatus', controller.statistics.stuCountByStatus);
   router.post('/v1/statistics/hourCountByTime', controller.statistics.hourCountByTime);
+
+  // 课时操作行为
+  router.post('/v1/student-operation/buy', controller.studentOperation.buy);
+  router.post('/v1/student-operation/sign', controller.studentOperation.sign);
+  router.post('/v1/student-operation/supplement', controller.studentOperation.supplement);
+  router.post('/v1/student-operation/share-package', controller.studentOperation.sharePackage);
 
   // 以下为微信接口
   // 微信
@@ -67,6 +72,6 @@ module.exports = app => {
   router.post('/wechat/course/list', controller.course.list);
 
   // 课时
-  router.post('/wechat/course-hour-flow/list', controller.CourseHourFlow.list);
+  router.post('/wechat/course-hour-flow/list', controller.courseHourFlow.list);
 
 };

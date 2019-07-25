@@ -2,7 +2,7 @@
 
 const Service = require('egg').Service;
 
-class HourService extends Service {
+class StudentOperationService extends Service {
 
   /**
    * 购买
@@ -456,4 +456,4 @@ class HourService extends Service {
   }
 }
 
-module.exports = HourService;
+module.exports = StudentOperationService;
