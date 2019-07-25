@@ -14,7 +14,7 @@ class StudentOperationService extends Service {
     // 1.查询课程包的状态
     const Package = await this.findPackage(packageId);
     // 2.关联课程包
-    const { count, amount } = Package;
+    const { count, amount, name } = Package;
     const data = await this.relatePackageToStu({
       packageId,
       studentIds: [ studentId ],
@@ -53,11 +53,12 @@ class StudentOperationService extends Service {
       const date = new Date();
       const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
       const tem = {
-        first: `您好,${stu.name}同学,签到成功！`,
-        keyword1: time,
-        keyword2: '111',
-        keyword3: '',
-        keyword4: '',
+        first: `您好,${stu.name}同学,充值成功！`,
+        keyword1: stu.name,
+        keyword2: name,
+        keyword3: `${count}课时`,
+        keyword4: `${count}课时`,
+        keyword5: time,
         remark: '祝您生活愉快！',
       };
       const { template_id } = this.config.schedule.package;
@@ -393,7 +394,7 @@ class StudentOperationService extends Service {
   // 关联学员课程包
   async relatePackageToStu(params) {
     const { ctx } = this;
-    const data = await ctx.model.studentPackage.create(params);
+    const data = await ctx.model.StudentPackage.create(params);
     // 关联成功
     if (data) {
       return data;
@@ -411,7 +412,7 @@ class StudentOperationService extends Service {
   // 查找学员课程包的明细
   async findStudentPackage(query) {
     const { ctx } = this;
-    const data = await ctx.model.studentPackage.findOne(query).sort({
+    const data = await ctx.model.StudentPackage.findOne(query).sort({
       createDate: -1,
     });
     if (data) {
@@ -429,7 +430,7 @@ class StudentOperationService extends Service {
   // 更新学员课程包的数量
   async updateStudentPackage(query, params) {
     const { ctx } = this;
-    const data = await ctx.model.studentPackage.updateOne(
+    const data = await ctx.model.StudentPackage.updateOne(
       query,
       params
     );
