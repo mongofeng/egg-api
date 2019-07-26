@@ -365,7 +365,7 @@ class StudentOperationService extends Service {
     const errorMsg = {
       code: 0,
       msg: 'student is not exit!',
-      desc: '学生不存在',
+      desc: '查询该学生信息不存在，请校队信息后重试',
       data: user,
     };
     ctx.throw(400, errorMsg);
@@ -383,7 +383,7 @@ class StudentOperationService extends Service {
       const errorMsg = {
         code: 0,
         msg: 'Package is not exit!',
-        desc: '课程包不存在',
+        desc: '查找的对应课程包不存在，请选择正确的课程包',
         data: Package,
       };
       ctx.throw(400, errorMsg);
@@ -422,7 +422,7 @@ class StudentOperationService extends Service {
     const errorMsg = {
       code: 0,
       msg: 'find package is fail!',
-      desc: '查找学员课程包的明细失败',
+      desc: '查询不了有效期内激活的课程包或者足够扣除的课程包，请检查课程包的信息',
       data,
     };
     ctx.throw(400, errorMsg);
@@ -443,7 +443,7 @@ class StudentOperationService extends Service {
     const errorMsg = {
       code: 0,
       msg: 'update package is fail!',
-      desc: '更新学员课程包的明细失败',
+      desc: '更新对应学员的课时数量失败，对应的课时不能相应扣除，请检查课程的数量',
       data,
     };
     ctx.throw(400, errorMsg);
