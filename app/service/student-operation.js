@@ -303,7 +303,7 @@ class StudentOperationService extends Service {
     };
     const update = await this.updateStudentPackage({
       _id: packages._id,
-    }, params, true);
+    }, params);
 
     // 4.推送微信消息
     let templateMsg = {};
@@ -429,7 +429,7 @@ class StudentOperationService extends Service {
   }
 
   // 更新学员课程包的数量
-  async updateStudentPackage(query, params, onMatch = false) {
+  async updateStudentPackage(query, params) {
     const { ctx } = this;
     const data = await ctx.model.StudentPackage.updateOne(
       query,
@@ -437,9 +437,6 @@ class StudentOperationService extends Service {
     );
     // data.n; // Number of documents matched
     // data.nModified; // Number of documents modified
-    if (onMatch && data.n) {
-      return data;
-    }
     if (data.n && data.nModified) {
       return data;
     }
