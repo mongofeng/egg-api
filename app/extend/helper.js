@@ -76,7 +76,7 @@ function compose() {
 /**
  *
  * @param data
- * @returns {{}}
+ * @return {{}}
  */
 function formateTemplate(data) {
   return Object.keys(data).reduce((initVal, key) => {
@@ -96,7 +96,18 @@ module.exports = {
   compose,
   parseXML,
   formateTemplate,
+  formateAggregateProjectFiles,
 };
+
+
+function formateAggregateProjectFiles(arr) {
+  return arr.reduce((initVal, key) => {
+    return {
+      ...initVal,
+      [key]: 1,
+    };
+  }, {});
+}
 
 
 //   链接：https://juejin.im/post/5c170f7ef265da614273ccb1

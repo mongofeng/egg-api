@@ -73,5 +73,10 @@ module.exports = app => {
 
   // 课时
   router.post('/wechat/course-hour-flow/list', controller.courseHourFlow.list);
+  router.get('/wechat/course-hour-flow/:id', controller.courseHourFlow.show);
+
+  // 课时统计
+  router.post('/wechat/student-package/list', controller.studentPackage.listDetail);
+  router.post('/wechat/student-package/simple-list', controller.studentPackage.list);
 
 };

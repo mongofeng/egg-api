@@ -42,6 +42,14 @@ class StudentPackageController extends Controller {
     ctx.status = 200;
     ctx.body = result;
   }
+
+
+  async listDetail() {
+    const { ctx } = this;
+    const result = await ctx.service.studentPackage.fetchStudent();
+    ctx.status = 200;
+    ctx.body = result;
+  }
 }
 
 module.exports = StudentPackageController;
