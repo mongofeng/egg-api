@@ -14,7 +14,7 @@ class StudentOperationService extends Service {
     // 1.查询课程包的状态
     const Package = await this.findPackage(packageId);
     // 2.关联课程包
-    const { count, amount, name, period } = Package;
+    const { count, amount, period } = Package;
     const data = await this.relatePackageToStu({
       packageId,
       studentIds: [ studentId ],
@@ -41,42 +41,6 @@ class StudentOperationService extends Service {
       desc,
     });
 
-    // 4.推送微信消息
-    const templateMsg = { name };
-    // const stu = await this.findStudent(studentId);
-    // if (stu && stu.openId) {
-    //   // {{first.DATA}}
-    //   // 上课日期：{{keyword1.DATA}}
-    //   // 班级名称：{{keyword2.DATA}}
-    //   // 本次扣课时：{{keyword3.DATA}}
-    //   // 剩余总课时：{{keyword4.DATA}}
-    //   // {{remark.DATA}}
-    //   const date = new Date();
-    //   const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
-    //   const tem = {
-    //     first: `您好,${stu.name}同学,充值成功！`,
-    //     keyword1: stu.name,
-    //     keyword2: name,
-    //     keyword3: `${count}课时`,
-    //     keyword4: `${count}课时`,
-    //     keyword5: time,
-    //     remark: '祝您生活愉快！',
-    //   };
-    //   const { template_id } = this.config.schedule.package;
-    //   const params = {
-    //     touser: stu.openId,
-    //     template_id,
-    //     data: ctx.helper.formateTemplate(tem),
-    //   };
-
-    //   templateMsg = await ctx.service.wechat.pushWechatMessage(params);
-    // } else {
-    //   templateMsg = {
-    //     errcode: 1,
-    //     errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
-    //   };
-    // }
-
 
     return {
       code: 1,
@@ -84,7 +48,6 @@ class StudentOperationService extends Service {
         classHour: result,
         package: Package,
         studentPackage: data,
-        templateMsg,
       },
       msg: 'insert success',
       desc: '添加成功',
@@ -308,46 +271,12 @@ class StudentOperationService extends Service {
       _id: packages._id,
     }, params);
 
-    // 4.推送微信消息
-    let templateMsg = {};
-    const stu = await this.findStudent(studentId);
-    if (stu && stu.openId) {
-      // {{first.DATA}}
-      // 上课日期：{{keyword1.DATA}}
-      // 班级名称：{{keyword2.DATA}}
-      // 本次扣课时：{{keyword3.DATA}}
-      // 剩余总课时：{{keyword4.DATA}}
-      // {{remark.DATA}}
-      const date = new Date();
-      const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
-      const tem = {
-        first: `您好,${stu.name}同学,签到成功！`,
-        keyword1: time,
-        remark: '祝您生活愉快！',
-      };
-      const { template_id } = this.config.schedule.package;
-      const params = {
-        touser: stu.openId,
-        template_id,
-        data: ctx.helper.formateTemplate(tem),
-      };
-
-      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
-    } else {
-      templateMsg = {
-        errcode: 1,
-        errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
-      };
-    }
-
-
     return {
       code: 1,
       data: {
         classHour: null,
         package: packages,
         studentPackage: update,
-        templateMsg,
       },
       msg: 'insert success',
       desc: '添加成功',
