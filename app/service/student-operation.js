@@ -125,7 +125,7 @@ class StudentOperationService extends Service {
         keyword4: `${packages.surplus - num}课时`,
         remark: '祝您生活愉快！',
       };
-      const { template_id } = this.config.schedule.package;
+      const { template_id } = this.config.schedule.sign;
       const params = {
         touser: stu.openId,
         template_id,
