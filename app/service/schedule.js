@@ -12,6 +12,7 @@ class ScheduleService extends Service {
     nowDate.setDate(nowDate.getDate() + 1);
 
     const time = nowDate.getTime();
+
     const data = await ctx.model.Course.aggregate([
       {
         $match: {
@@ -22,9 +23,7 @@ class ScheduleService extends Service {
             $gte: time,
           },
           status: 1,
-          day: {
-            $in: [ nowDate.getDay() ],
-          },
+          day: nowDate.getDay(),
         },
       },
       {
@@ -87,7 +86,7 @@ class ScheduleService extends Service {
       },
       {
         $match: {
-          isSendTemplate: true,
+          // isSendTemplate: true,
           $expr: { $ne: [ '$openId', '' ] }, // 去除openid为空的状况
         },
       },
