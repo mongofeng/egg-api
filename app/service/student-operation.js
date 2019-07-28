@@ -246,15 +246,18 @@ class StudentOperationService extends Service {
     let templateMsg = {};
     const stu = await this.findStudent(studentId);
     if (stu && stu.openId) {
+
       const date = new Date();
       const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
       const tem = {
-        first: `您好,${stu.name}同学,签到成功！`,
-        keyword1: time,
-        keyword2: '111',
+        first: '亲爱的家长您好，我们已为您孩子的学习课程进行补签',
+        keyword1: course.map(item => item.name).join(','),
+        keyword2: time,
+        keyword3: `${num}课时`,
+        keyword4: desc,
         remark: '祝您生活愉快！',
       };
-      const { template_id } = this.config.schedule.package;
+      const { template_id } = this.config.schedule.supplement;
       const params = {
         touser: stu.openId,
         template_id,

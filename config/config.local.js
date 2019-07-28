@@ -44,6 +44,9 @@ module.exports = appInfo => {
     package: {
       template_id: 'JVkTSFKlbgG5I8OZ6EGW69X0shbkJPqHg0Zx9N4m5OM',
     },
+    supplement: {
+      template_id: '6T2JA3Zm8iIUM9DoqYEUb4FIW7uRGG8jTUbPgXAYRsI',
+    },
   };
 
   return config;
