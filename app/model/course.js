@@ -15,7 +15,6 @@ module.exports = app => {
       },
       teacherId: { // 老师
         type: String,
-        default: '',
         required: true,
       },
       studentIds: { // 学生
@@ -39,11 +38,11 @@ module.exports = app => {
         required: true,
       },
       startDate: { // 开课时间
-        type: Number,
+        type: Date,
         required: true,
       },
       endDate: { // 结课时间
-        type: Number,
+        type: Date,
         required: true,
       },
       startTime: { // 课堂开始时间

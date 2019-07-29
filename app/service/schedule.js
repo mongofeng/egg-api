@@ -11,7 +11,7 @@ class ScheduleService extends Service {
     // 获取1天后的日期
     nowDate.setDate(nowDate.getDate() + 1);
 
-    const time = nowDate.getTime();
+    const time = nowDate;
 
     const data = await ctx.model.Course.aggregate([
       {
