@@ -52,7 +52,9 @@ module.exports = app => {
   router.post('/v1/student-operation/supplement', controller.studentOperation.supplement);
   router.post('/v1/student-operation/share-package', controller.studentOperation.sharePackage);
 
-  // 以下为微信接口
+  router.post('/v1/student-operation/activate-package', controller.studentOperation.activatePackage);
+
+  // ----------------------------------------以下为微信接口-------------------------------------------------------
   // 微信
   router.get('/wechat/token', controller.wechat.fetchAccessToken);
   router.post('/wechat/openid', controller.wechat.fetchOpenId);

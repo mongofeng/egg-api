@@ -33,6 +33,14 @@ class StudentOperationController extends Controller {
     ctx.status = 200;
     ctx.body = result;
   }
+
+
+  async activatePackage() {
+    const { ctx } = this;
+    const result = await ctx.service.studentOperation.activatePackage();
+    ctx.status = 200;
+    ctx.body = result;
+  }
 }
 
 module.exports = StudentOperationController;

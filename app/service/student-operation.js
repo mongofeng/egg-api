@@ -42,12 +42,40 @@ class StudentOperationService extends Service {
     });
 
 
+    // 4.推送微信消息
+    let templateMsg = {};
+    const stu = await this.findStudent(studentId);
+    if (stu && stu.openId) {
+      const tem = {
+        first: `您好,${stu.name}同学,签到成功！`,
+        keyword1: stu.name,
+        keyword2: Package.name,
+        keyword3: `${count}课时`,
+        remark: '祝您生活愉快！',
+      };
+      const { template_id } = this.config.schedule.package;
+      const params = {
+        touser: stu.openId,
+        template_id,
+        data: ctx.helper.formateTemplate(tem),
+      };
+
+      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
+    } else {
+      templateMsg = {
+        errcode: 1,
+        errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
+      };
+    }
+
+
     return {
       code: 1,
       data: {
         classHour: result,
         package: Package,
         studentPackage: data,
+        templateMsg,
       },
       msg: 'insert success',
       desc: '添加成功',
@@ -276,6 +304,70 @@ class StudentOperationService extends Service {
       data: {
         classHour: null,
         package: packages,
+        studentPackage: update,
+      },
+      msg: 'insert success',
+      desc: '添加成功',
+    };
+  }
+
+  /**
+   * 激活课程包
+   */
+  async activatePackage() {
+    const { ctx } = this;
+    const { activeTime, endTime, packageId, studentId, wechat, id } = ctx.request.body;
+    const params = { $set: {
+      activeTime,
+      endTime,
+      isActive: true,
+    } };
+    const update = await this.updateStudentPackage({
+      _id: id,
+    }, params);
+
+    // 4.推送微信消息
+    let templateMsg = {};
+    if (wechat) {
+      // 1.查找课时包
+      // 1.查询课程包的状态
+      const Package = await this.findPackage(packageId);
+      const stu = await this.findStudent(studentId);
+
+      if (stu && stu.openId) {
+        let date = new Date(activeTime);
+        const keyword3 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
+        date = new Date(endTime);
+        const keyword4 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
+        const tem = {
+          first: `您好,${stu.name}同学,您所购买的套餐已经激活成功！`,
+          keyword1: Package.name,
+          keyword2: `${Package.count}课时`,
+          keyword3,
+          keyword4,
+          remark: '祝您生活愉快！',
+        };
+        const { template_id } = this.config.schedule.activate;
+        const params = {
+          touser: stu.openId,
+          template_id,
+          data: ctx.helper.formateTemplate(tem),
+        };
+
+        templateMsg = await ctx.service.wechat.pushWechatMessage(params);
+      } else {
+        templateMsg = {
+          errcode: 1,
+          errmsg: stu ? '该学生还没绑定微信号,没有推送消息' : '查询不到改学生,没有推送消息',
+        };
+      }
+    }
+
+
+    return {
+      code: 1,
+      data: {
+        templateMsg,
         studentPackage: update,
       },
       msg: 'insert success',
