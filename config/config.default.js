@@ -80,16 +80,19 @@ module.exports = appInfo => {
     // 定时任务的配置
     schedule: {
       course: {
-        template_id: 'HS3-DZGGG2zkpOq0O4ymQwOg2PNN0cbHaAmJCxJZycM',
+        template_id: 'HS3-DZGGG2zkpOq0O4ymQwOg2PNN0cbHaAmJCxJZycM', // 上课提醒
       },
       sign: {
-        template_id: 'yMWwcsc25qNY-24GYSD_KTvVbFIQFPLZuzzP_YyXTgM',
+        template_id: 'yMWwcsc25qNY-24GYSD_KTvVbFIQFPLZuzzP_YyXTgM', // 签到提醒
       },
       package: {
-        template_id: 'JVkTSFKlbgG5I8OZ6EGW69X0shbkJPqHg0Zx9N4m5OM',
+        template_id: 'qcf3mZG_XkEwkVYuV4IKk53H44tcyU70kW9xsnn24lM', // 添加课程包
       },
       supplement: {
-        template_id: '6T2JA3Zm8iIUM9DoqYEUb4FIW7uRGG8jTUbPgXAYRsI',
+        template_id: '6T2JA3Zm8iIUM9DoqYEUb4FIW7uRGG8jTUbPgXAYRsI', // 补签
+      },
+      activate: {
+        template_id: 'j0QlBCdxICR9I00H7I8pgbOkQKWv68W-Ia6Zx-XGptw', // 激活
       },
     },
   };
