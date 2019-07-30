@@ -47,7 +47,7 @@ class StudentOperationService extends Service {
     const stu = await this.findStudent(studentId);
     if (stu && stu.openId) {
       const tem = {
-        first: `您好,${stu.name}同学,签到成功！`,
+        first: `您好,${stu.name}同学,您所购买的套餐已经充值成功！`,
         keyword1: stu.name,
         keyword2: Package.name,
         keyword3: `${count}课时`,
