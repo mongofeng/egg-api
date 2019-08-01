@@ -22,13 +22,9 @@ class StudentPackageService extends Service {
 
     const fieldsObj = ctx.helper.formateAggregateProjectFiles(fields);
 
-    const { studentId, isActive = true } = body;
     const data = await ctx.model.StudentPackage.aggregate([
       {
-        $match: {
-          studentIds: studentId,
-          isActive,
-        },
+        $match: body,
       },
       {
         $unwind: '$studentIds', // 结构数组
