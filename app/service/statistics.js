@@ -172,6 +172,53 @@ class StatisticsService extends Service {
       desc: '获取成功',
     };
   }
+
+
+  groupFields(obj) {
+    return Object.keys(obj).reduce((initVal, key) => {
+      return {
+        ...initVal,
+        [key]: { [obj[key]]: `$${key}` },
+      };
+    }, {});
+  }
+
+  /**
+   * 统计课时
+   */
+  async caculatePackage(body) {
+    const { ctx } = this;
+    const fields = {
+      amount: '$sum',
+      count: '$sum',
+      used: '$sum',
+      surplus: '$sum',
+    };
+    const data = await ctx.model.StudentPackage.aggregate([
+      {
+        $unwind: '$studentIds', // 结构数组
+      },
+      {
+        $match: body,
+      },
+      {
+        $group: {
+          _id: '$studentIds',
+          ...this.groupFields(fields),
+          overdueCount: {
+            $sum: { $cond: [ '$beOverdue', '$surplus', 0 ] },
+          },
+          activiteCount: {
+            $sum: { $cond: [ '$isActive', '$count', 0 ] },
+          },
+          unActiviteCount: {
+            $sum: { $cond: [ '$isActive', 0, '$count' ] },
+          },
+        },
+      },
+    ]);
+    return data;
+  }
 }
 
 module.exports = StatisticsService;

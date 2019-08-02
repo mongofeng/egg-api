@@ -27,6 +27,18 @@ class StatisticsController extends Controller {
     ctx.status = 200;
     ctx.body = result;
   }
+
+  async caculatePackage() {
+    const { ctx } = this;
+    const data = await ctx.service.statistics.caculatePackage(ctx.request.body);
+    ctx.status = 200;
+    ctx.body = {
+      code: 1,
+      msg: 'find success',
+      data,
+      desc: '获取成功',
+    };
+  }
 }
 
 module.exports = StatisticsController;

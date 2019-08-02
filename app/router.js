@@ -45,6 +45,7 @@ module.exports = app => {
   router.post('/v1/statistics/stuCountByTime', controller.statistics.stuCountByTime);
   router.post('/v1/statistics/stuCountByStatus', controller.statistics.stuCountByStatus);
   router.post('/v1/statistics/hourCountByTime', controller.statistics.hourCountByTime);
+  router.post('/v1/statistics/caculatePackage', controller.statistics.caculatePackage);
 
   // 课时操作行为
   router.post('/v1/student-operation/buy', controller.studentOperation.buy);
@@ -80,5 +81,6 @@ module.exports = app => {
   // 课时统计
   router.post('/wechat/student-package/list', controller.studentPackage.listDetail);
   router.post('/wechat/student-package/simple-list', controller.studentPackage.list);
+  router.post('/wechat/statistics/caculatePackage', controller.statistics.caculatePackage);
 
 };
