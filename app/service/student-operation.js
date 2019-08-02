@@ -143,6 +143,11 @@ class StudentOperationService extends Service {
       // 本次扣课时：{{keyword3.DATA}}
       // 剩余总课时：{{keyword4.DATA}}
       // {{remark.DATA}}
+      const result = await ctx.service.statistics.caculatePackage({
+        studentIds: studentId,
+      });
+      const [ target ] = result;
+      const keyword4 = `${target.surplus}课时`;
       const date = new Date();
       const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
       const tem = {
@@ -150,7 +155,7 @@ class StudentOperationService extends Service {
         keyword1: time,
         keyword2: courseName,
         keyword3: `${num}课时`,
-        keyword4: `${packages.surplus - num}课时`,
+        keyword4,
         remark: '祝您生活愉快！',
       };
       const { template_id } = this.config.schedule.sign;
@@ -238,6 +243,13 @@ class StudentOperationService extends Service {
     const stu = await this.findStudent(studentId);
     if (stu && stu.openId) {
 
+      const result = await ctx.service.statistics.caculatePackage({
+        studentIds: studentId,
+      });
+      const [ target ] = result;
+      console.log(target);
+      // const keyword4 = `${packages.surplus - num}课时`
+      const keyword4 = `${target.surplus}课时`;
       const date = new Date();
       const time = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
       const tem = {
@@ -245,7 +257,7 @@ class StudentOperationService extends Service {
         keyword1: course.map(item => item.name).join(','),
         keyword2: time,
         keyword3: `${num}课时`,
-        keyword4: `${packages.surplus - num}课时`,
+        keyword4,
         keyword5: desc,
         remark: '祝您生活愉快！',
       };
@@ -339,7 +351,7 @@ class StudentOperationService extends Service {
         let date = new Date(activeTime);
         const keyword3 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
         date = new Date(endTime);
-        const keyword4 = `${Package.period}年`
+        const keyword4 = `${Package.period}年`;
         const keyword5 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
         const tem = {
           first: `您好,${stu.name}同学,您所购买的套餐已经激活成功！`,
