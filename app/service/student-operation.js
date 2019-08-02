@@ -245,7 +245,8 @@ class StudentOperationService extends Service {
         keyword1: course.map(item => item.name).join(','),
         keyword2: time,
         keyword3: `${num}课时`,
-        keyword4: desc,
+        keyword4: `${packages.surplus - num}课时`,
+        keyword5: desc,
         remark: '祝您生活愉快！',
       };
       const { template_id } = this.config.schedule.supplement;
@@ -338,13 +339,15 @@ class StudentOperationService extends Service {
         let date = new Date(activeTime);
         const keyword3 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
         date = new Date(endTime);
-        const keyword4 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
+        const keyword4 = `${Package.period}年`
+        const keyword5 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
         const tem = {
           first: `您好,${stu.name}同学,您所购买的套餐已经激活成功！`,
           keyword1: Package.name,
           keyword2: `${Package.count}课时`,
           keyword3,
           keyword4,
+          keyword5,
           remark: '祝您生活愉快！',
         };
         const { template_id } = this.config.schedule.activate;

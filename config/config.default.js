@@ -89,10 +89,10 @@ module.exports = appInfo => {
         template_id: 'qcf3mZG_XkEwkVYuV4IKk53H44tcyU70kW9xsnn24lM', // 添加课程包
       },
       supplement: {
-        template_id: '6T2JA3Zm8iIUM9DoqYEUb4FIW7uRGG8jTUbPgXAYRsI', // 补签
+        template_id: 'AQnWg1pIJRJvhD4p1HmCLluQn0EFHwLAGHDubmyWN1g', // 补签
       },
       activate: {
-        template_id: 'j0QlBCdxICR9I00H7I8pgbOkQKWv68W-Ia6Zx-XGptw', // 激活
+        template_id: 'PP5c6hxWr-FpPwo-iws59McKEj0eC1nKrpiVnE-zCP8', // 激活
       },
     },
   };
