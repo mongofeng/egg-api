@@ -63,10 +63,10 @@ module.exports = app => {
       type: String,
       default: '',
     },
-    isSendTemplate: {
-      type: Boolean,
-      default: false,
-    },
+    // isSendTemplate: {
+    //   type: Boolean,
+    //   default: false,
+    // },
   }, { collection: 'student', versionKey: false, timestamps: { createdAt: 'createDate', updatedAt: 'updateDate' } });
 
 
