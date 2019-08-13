@@ -15,8 +15,8 @@ deloy_path=edu
 # docker镜像
 image=registry.cn-hangzhou.aliyuncs.com/yangpu/egg-web
 
-
-ssh $deloy_server $i <<  remotessh
+# https://www.cnblogs.com/ilfmonday/p/ShellRemote.html;https://blog.csdn.net/wyl9527/article/details/72770455
+ssh -Tq $deloy_server <<  remotessh
 
 echo "进入目录：${deloy_root_path}${code_path}"
 cd ${deloy_root_path}${code_path}
@@ -28,8 +28,7 @@ echo "进入部署目录：${deloy_root_path}${deloy_path}"
 cd ${deloy_root_path}${deloy_path}
 # 重启docker容器
 docker-compose up -d
-# touch index.txt
-# echo 11 >> index.txt
+
 exit
 
 remotessh
