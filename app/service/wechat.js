@@ -90,19 +90,17 @@ class WechatService extends Service {
    * 获取token的函数
    */
   async wechatToken() {
-    // const data = await this.ctx.model.Wechat.findOne({ name: 'wechat_token' });
-    // const fun = this.ctx.helper.compose(
-    //   this.getformWechat,
-    //   this.updateWechatToken,
-    //   this.getformDatabase
-    // );
-    // const result = await fun(data);
-    // console.log('------------------------------------token--------------------------------------')
-    // console.log(result)
+    const data = await this.ctx.model.Wechat.findOne({ name: 'wechat_token' });
+    const fun = this.ctx.helper.compose(
+      this.getformWechat,
+      this.updateWechatToken,
+      this.getformDatabase
+    );
+    const result = await fun(data);
+    console.log('------------------------------------token--------------------------------------')
+    console.log(result)
     // result.access_token = '23_yET7u-RIASKHw5mYcDcA0TeaMKdRwKlALACmAO72M41pbjR0EQj0IxOgpw-tM-cOsvkOuqZ6L3U5clg16P51rzgwBL2R_q_s0WYNyNFVh87wcHpIDNWAwWbNCJrpwmj9uyZECJdGvro6a_L0STNhAAAMNH';
-    return {
-      access_token: '24_u_slzo-5e2-zrIFcM0y-2zvhJq4vMQ1F3FS7Pt2_loBnDy2FKwPkkBAsfWxwZGsQfEuwk9O_wf0uu-1dEnxGN_QTJuX3w8R6uVbdNLAtt9j8ABgamiQseWNqiuis-Nb2zqUSlAXd3_zltcNRHMIgAEAVAW'
-    };
+    return result;
   }
 
   // 数据库里面没有
