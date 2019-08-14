@@ -89,7 +89,7 @@ class StudentOperationService extends Service {
     // $inc在原基础上更改：https://docs.mongodb.com/manual/reference/operator/update/inc/#up._S_inc
     const { ctx } = this;
     const body = ctx.request.body;
-    const { studentId, course, num, desc = '', courseName } = body;
+    const { studentId, course, num, desc = '', courseName, id } = body;
 
     const query = {
       studentIds: {
@@ -100,6 +100,10 @@ class StudentOperationService extends Service {
         $gte: num,
       },
     };
+
+    if (id) {
+      query.id = id
+    }
 
     // 1.查找课时包
     const packages = await this.findStudentPackage(query);
@@ -194,7 +198,7 @@ class StudentOperationService extends Service {
   async supplement() {
     const { ctx } = this;
     const body = ctx.request.body;
-    const { studentId, course, num, desc = '' } = body;
+    const { studentId, course, num, desc = '', id } = body;
 
     const query = {
       studentIds: {
@@ -205,6 +209,10 @@ class StudentOperationService extends Service {
         $gte: num,
       },
     };
+
+    if (id) {
+      query.id = id
+    }
 
     // 1.查找课时包
     const packages = await this.findStudentPackage(query);
