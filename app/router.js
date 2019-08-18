@@ -15,6 +15,7 @@ module.exports = app => {
   // 学生
   router.resources('student', '/v1/student', controller.student);
   router.post('/v1/student/list', controller.student.list);
+  router.put('/v1/student/bindingWechat/:id', controller.student.bindingWechat);
 
   // 课程包
   router.resources('package', '/v1/package', controller.package);
@@ -70,6 +71,7 @@ module.exports = app => {
   // 学生
   router.resources('student', '/wechat/student', controller.student);
   router.post('/wechat/student/list', controller.student.list);
+  router.put('/wechat/student/bindingWechat/:id', controller.student.bindingWechat);
 
   // 课程
   router.post('/wechat/course/list', controller.course.list);

@@ -117,6 +117,34 @@ class StudentService extends Service {
       desc: '获取成功',
     };
   }
+
+
+  async bindingWechat() {
+    const { ctx } = this;
+    const body = ctx.request.body;
+    const { openId } = body;
+    const { id } = ctx.params;
+
+    // 2.关联现有的学员
+    const params = {
+      $addToSet: { openId },
+    };
+
+    const data = await ctx.model.Student.updateOne(
+      { _id: id },
+      params
+    );
+    if (data.n && data.nModified) {
+      return data;
+    }
+    const errorMsg = {
+      code: 0,
+      msg: 'update package is fail!',
+      desc: '更新学员微信号绑定失败',
+      data,
+    };
+    ctx.throw(400, errorMsg);
+  }
 }
 
 module.exports = StudentService;

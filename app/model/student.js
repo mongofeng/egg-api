@@ -16,13 +16,8 @@ module.exports = app => {
     },
     sex: {
       type: Number,
-      default: 1,
       required: true,
     },
-    // age: {
-    //   type: Number,
-    //   required: true,
-    // },
     contacts: {
       type: String,
       required: true,
@@ -47,8 +42,8 @@ module.exports = app => {
       default: '',
     },
     openId: {
-      type: String,
-      default: '',
+      type: [ String ],
+      default: [],
     },
     teacherId: {
       type: String,

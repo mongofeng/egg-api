@@ -39,6 +39,15 @@ class StudentController extends Controller {
     ctx.body = result;
   }
 
+
+  // put：改   student/:id
+  async bindingWechat() {
+    const { ctx } = this;
+    const result = await ctx.service.student.bindingWechat();
+    ctx.status = 200;
+    ctx.body = result;
+  }
+
   // delete：删   student/:id
   async destroy() {
     const { ctx } = this;
