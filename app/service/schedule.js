@@ -85,8 +85,10 @@ class ScheduleService extends Service {
         },
       },
       {
+        $unwind: '$openId', // 结构数组
+      },
+      {
         $match: {
-          // isSendTemplate: true,
           $expr: { $ne: [ '$openId', '' ] }, // 去除openid为空的状况
         },
       },
@@ -156,8 +158,10 @@ class ScheduleService extends Service {
         },
       },
       {
+        $unwind: '$openId', // 结构数组
+      },
+      {
         $match: {
-          isSendTemplate: true,
           $expr: { $ne: [ '$openId', '' ] }, // 去除openid为空的状况
         },
       },

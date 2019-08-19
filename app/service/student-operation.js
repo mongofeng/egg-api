@@ -45,7 +45,7 @@ class StudentOperationService extends Service {
     // 4.推送微信消息
     let templateMsg = {};
     const stu = await this.findStudent(studentId);
-    if (stu && stu.openId) {
+    if (this.hasOpenId(stu)) {
       const tem = {
         first: `您好,${stu.name}同学,您所购买的套餐已经充值成功！`,
         keyword1: stu.name,
@@ -54,13 +54,18 @@ class StudentOperationService extends Service {
         remark: '祝您生活愉快！',
       };
       const { template_id } = this.config.schedule.package;
-      const params = {
-        touser: stu.openId,
-        template_id,
-        data: ctx.helper.formateTemplate(tem),
-      };
 
-      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
+      const allIds = stu.openId.filter(id => !!id);
+      const PromiseMap = allIds.map(touser => {
+        const params = {
+          touser,
+          template_id,
+          data: ctx.helper.formateTemplate(tem),
+        };
+        return ctx.service.wechat.pushWechatMessage(params);
+      });
+
+      templateMsg = await Promise.all(PromiseMap);
     } else {
       templateMsg = {
         errcode: 1,
@@ -102,7 +107,7 @@ class StudentOperationService extends Service {
     };
 
     if (id) {
-      query.id = id
+      query.id = id;
     }
 
     // 1.查找课时包
@@ -140,7 +145,7 @@ class StudentOperationService extends Service {
     // 4.推送微信消息
     let templateMsg = {};
     const stu = await this.findStudent(studentId);
-    if (stu && stu.openId) {
+    if (this.hasOpenId(stu)) {
       // {{first.DATA}}
       // 上课日期：{{keyword1.DATA}}
       // 班级名称：{{keyword2.DATA}}
@@ -163,13 +168,19 @@ class StudentOperationService extends Service {
         remark: '祝您生活愉快！',
       };
       const { template_id } = this.config.schedule.sign;
-      const params = {
-        touser: stu.openId,
-        template_id,
-        data: ctx.helper.formateTemplate(tem),
-      };
 
-      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
+      const allIds = stu.openId.filter(id => !!id);
+      const PromiseMap = allIds.map(touser => {
+        const params = {
+          touser,
+          template_id,
+          data: ctx.helper.formateTemplate(tem),
+        };
+        return ctx.service.wechat.pushWechatMessage(params);
+      });
+
+      templateMsg = await Promise.all(PromiseMap);
+
     } else {
       templateMsg = {
         errcode: 1,
@@ -211,7 +222,7 @@ class StudentOperationService extends Service {
     };
 
     if (id) {
-      query.id = id
+      query.id = id;
     }
 
     // 1.查找课时包
@@ -249,7 +260,7 @@ class StudentOperationService extends Service {
     // 4.推送微信消息
     let templateMsg = {};
     const stu = await this.findStudent(studentId);
-    if (stu && stu.openId) {
+    if (this.hasOpenId(stu)) {
 
       const result = await ctx.service.statistics.caculatePackage({
         studentIds: studentId,
@@ -270,13 +281,17 @@ class StudentOperationService extends Service {
         remark: '祝您生活愉快！',
       };
       const { template_id } = this.config.schedule.supplement;
-      const params = {
-        touser: stu.openId,
-        template_id,
-        data: ctx.helper.formateTemplate(tem),
-      };
+      const allIds = stu.openId.filter(id => !!id);
+      const PromiseMap = allIds.map(touser => {
+        const params = {
+          touser,
+          template_id,
+          data: ctx.helper.formateTemplate(tem),
+        };
+        return ctx.service.wechat.pushWechatMessage(params);
+      });
 
-      templateMsg = await ctx.service.wechat.pushWechatMessage(params);
+      templateMsg = await Promise.all(PromiseMap);
     } else {
       templateMsg = {
         errcode: 1,
@@ -355,7 +370,7 @@ class StudentOperationService extends Service {
       const Package = await this.findPackage(packageId);
       const stu = await this.findStudent(studentId);
 
-      if (stu && stu.openId) {
+      if (this.hasOpenId(stu)) {
         let date = new Date(activeTime);
         const keyword3 = `${date.getFullYear()}年${date.getMonth() + 1}月${date.getDate()}号`;
         date = new Date(endTime);
@@ -371,13 +386,17 @@ class StudentOperationService extends Service {
           remark: '祝您生活愉快！',
         };
         const { template_id } = this.config.schedule.activate;
-        const params = {
-          touser: stu.openId,
-          template_id,
-          data: ctx.helper.formateTemplate(tem),
-        };
+        const allIds = stu.openId.filter(id => !!id);
+        const PromiseMap = allIds.map(touser => {
+          const params = {
+            touser,
+            template_id,
+            data: ctx.helper.formateTemplate(tem),
+          };
+          return ctx.service.wechat.pushWechatMessage(params);
+        });
 
-        templateMsg = await ctx.service.wechat.pushWechatMessage(params);
+        templateMsg = await Promise.all(PromiseMap);
       } else {
         templateMsg = {
           errcode: 1,
@@ -502,6 +521,11 @@ class StudentOperationService extends Service {
     const { ctx } = this;
     const result = await ctx.model.CourseHourFlow.create(body);
     return result;
+  }
+
+
+  hasOpenId(stu) {
+    return stu && stu.openId && stu.openId.length && stu.openId.some(id => !!id);
   }
 }
 
