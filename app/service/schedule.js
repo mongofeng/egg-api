@@ -117,46 +117,90 @@ class ScheduleService extends Service {
   // 剩余的课时数少于2个的时候
   async fetchCurrentClassHourCount() {
     const { ctx } = this;
-    const data = await ctx.model.StudentHour.aggregate([
+    const fields = [
+      'activeTime',
+      'beOverdue',
+      'count',
+      'endTime',
+      'isActive',
+      'packageId',
+      'studentIds',
+      'surplus',
+      'surplus',
+      'used',
+    ];
+
+    const fieldsObj = ctx.helper.formateAggregateProjectFiles(fields);
+
+    const data = await ctx.model.StudentPackage.aggregate([
       {
-        $project: {
-          reset: {
-            $subtract: [ '$num', '$used' ],
+        $match: {
+          surplus: { // 剩余课时
+            $lte: 6,
           },
-          studentId: {
-            $convert:
-            {
-              input: '$studentId',
-              to: 'objectId',
-            },
-          },
+          isPush: false, // // 是否推送过期的通知
+          isActive: true, // 是否激活
+          beOverdue: false, // 是否过时
         },
       },
       {
-        $match: {
-          reset: {
-            $gte: 2,
-          },
-        },
+        $unwind: '$studentIds', // 结构数组
       },
       {
         $lookup: {
           from: 'student',
-          localField: 'studentId',
-          foreignField: '_id',
-          as: 'studentMsg',
+          let: { stuId: { $toObjectId: '$studentIds' } }, // 把studentid变成Object(id)
+          pipeline: [
+            {
+              $match: {
+                // 接受聚合表达式
+                $expr: { $eq: [ '$_id', '$$stuId' ] },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                openId: 1,
+                studentName: '$name',
+              },
+            },
+          ],
+          as: 'student',
+        },
+      },
+      {
+        $lookup: {
+          from: 'package',
+          let: { tId: { $toObjectId: '$packageId' } },
+          pipeline: [
+            {
+              $match: {
+                // 接受聚合表达式
+                $expr: { $eq: [ '$_id', '$$tId' ] },
+              },
+            },
+            {
+              $project: {
+                _id: 0,
+                packageName: '$name',
+              },
+            },
+          ],
+          as: 'package',
         },
       },
       {
         $replaceRoot: {
           newRoot: {
             $mergeObjects: [
-              { $arrayElemAt: [ '$studentMsg', 0 ] }, // 拿数组的第一位，变成一个object
+              { $arrayElemAt: [ '$package', 0 ] }, // 拿数组的第一位，变成一个object
+              { $arrayElemAt: [ '$student', 0 ] }, // 拿数组的第一位，变成一个object
               '$$ROOT', // 覆盖数组
             ],
           },
         },
       },
+
       {
         $unwind: '$openId', // 结构数组
       },
@@ -165,12 +209,15 @@ class ScheduleService extends Service {
           $expr: { $ne: [ '$openId', '' ] }, // 去除openid为空的状况
         },
       },
+
       {
-        $project: {
-          // 只保留openid,和名字,剩余课时数
+        $project:
+        {
+          _id: 1,
+          packageName: 1,
           openId: 1,
-          name: 1,
-          reset: 1,
+          studentName: 1,
+          ...fieldsObj,
         },
       },
     ]);
