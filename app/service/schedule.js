@@ -116,6 +116,42 @@ class ScheduleService extends Service {
 
   // 剩余的课时数少于2个的时候
   async fetchCurrentClassHourCount() {
+    const params = {
+      $match: {
+        surplus: { // 剩余课时
+          $lte: 6,
+        },
+        isPush: false, // // 是否推送过期的通知
+        isActive: true, // 是否激活
+        beOverdue: false, // 是否过时
+      },
+    };
+
+    const data = await this.fetchPackage(params);
+    return data;
+  }
+
+
+  async fetchExpiredPackage() {
+    const date = new Date();
+    date.setMonth(date.getMonth() + 1);
+    const params = {
+      $match: {
+        endTime: { // 结束时间少于当前一个月后的时间
+          $lte: date,
+        },
+        isPush: false, // // 是否推送过期的通知
+        isActive: true, // 是否激活
+        beOverdue: false, // 是否过时
+      },
+    };
+
+    const data = await this.fetchPackage(params);
+    return data;
+  }
+
+
+  async fetchPackage(params) {
     const { ctx } = this;
     const fields = [
       'activeTime',
@@ -133,16 +169,7 @@ class ScheduleService extends Service {
     const fieldsObj = ctx.helper.formateAggregateProjectFiles(fields);
 
     const data = await ctx.model.StudentPackage.aggregate([
-      {
-        $match: {
-          surplus: { // 剩余课时
-            $lte: 6,
-          },
-          isPush: false, // // 是否推送过期的通知
-          isActive: true, // 是否激活
-          beOverdue: false, // 是否过时
-        },
-      },
+      params,
       {
         $unwind: '$studentIds', // 结构数组
       },

@@ -1,11 +1,11 @@
 'use strict';
 const Subscription = require('egg').Subscription;
 
-class PackageSchedule extends Subscription {
+class ExpiredPackageSchedule extends Subscription {
   static get schedule() {
     return {
-      cron: '0 0 8 * * *', // 8点分执行一次
-      // interval: '10s', // 1 分钟间隔
+      cron: '0 10 8 * * *', // 8点分执行一次
+      //   interval: '10s', // 1 分钟间隔
       type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
   }
@@ -13,11 +13,8 @@ class PackageSchedule extends Subscription {
   // subscribe 是真正定时任务执行时被运行的函数
   async subscribe() {
     const { ctx } = this;
-
-    const list = await ctx.service.schedule.fetchCurrentClassHourCount();
-
+    const list = await ctx.service.schedule.fetchExpiredPackage();
     const { template_id } = this.config.schedule.package;
-
 
     const success = [];
     const pushWechatMessage = async ({ param, id }) => {
@@ -26,6 +23,8 @@ class PackageSchedule extends Subscription {
         success.push(id);
       }
     };
+
+    console.log(list);
 
     const allPromise = list.map(item => {
       const tem = {
@@ -50,7 +49,7 @@ class PackageSchedule extends Subscription {
 
     await Promise.all(allPromise);
 
-    this.ctx.logger.info(success);
+    console.log(success);
 
     if (success.length) {
       const data = await ctx.model.StudentPackage.updateMany(
@@ -61,7 +60,9 @@ class PackageSchedule extends Subscription {
 
       console.log(data);
     }
+
+
   }
 }
 
-module.exports = PackageSchedule;
+module.exports = ExpiredPackageSchedule;
