@@ -4,8 +4,7 @@ const Subscription = require('egg').Subscription;
 class PackageSchedule extends Subscription {
   static get schedule() {
     return {
-      // cron: '0 0 8 * * *', // 21点分执行一次
-      interval: '10s', // 1 分钟间隔
+      cron: '0 0 8 * * *', // 8点分执行一次
       type: 'worker', // 每台机器上只有一个 worker 会执行这个定时任务，每次执行定时任务的 worker 的选择是随机的
     };
   }
