@@ -250,6 +250,131 @@ class ScheduleService extends Service {
     ]);
     return data;
   }
+
+
+  async fetchCurrentNoticeCourse() {
+    // 当天的课程
+    const { ctx } = this;
+
+
+    const time = new Date();
+
+    // 一个半小时之后
+    const HourDate = new Date();
+    HourDate.setHours(HourDate.getHours() + 1);
+    HourDate.setMinutes(HourDate.getMinutes() + 30);
+
+    let hour = HourDate.getHours();
+    hour = String(hour).padStart(2, '0');
+
+    let minutes = HourDate.getMinutes();
+    minutes = String(minutes).padStart(2, '0');
+
+    const startTime = `${hour}:${minutes}`;
+
+    const data = await ctx.model.Course.aggregate([
+      {
+        $match: {
+          startDate: {
+            $lte: time,
+          },
+          endDate: {
+            $gte: time,
+          },
+          startTime: {
+            $gte: startTime,
+          },
+          status: 1,
+          isNotice: false,
+          day: time.getDay(),
+        },
+      },
+      {
+        $unwind: '$studentIds', // 结构数组
+      },
+      {
+        $lookup: {
+          from: 'student',
+          let: { stuId: { $toObjectId: '$studentIds' } }, // 把studentid变成Object(id)
+          pipeline: [
+            {
+              $match: {
+                // 接受聚合表达式
+                $expr: { $eq: [ '$_id', '$$stuId' ] },
+              },
+            },
+            {
+              $project: {
+                isSendTemplate: 1,
+                openId: 1,
+                stu_name: '$name',
+                stu_id: '$_id',
+              },
+            },
+          ],
+          as: 'student',
+        },
+      },
+      {
+        $lookup: {
+          from: 'teacher',
+          let: { tId: { $toObjectId: '$teacherId' } },
+          pipeline: [
+            {
+              $match: {
+                // 接受聚合表达式
+                $expr: { $eq: [ '$_id', '$$tId' ] },
+              },
+            },
+            {
+              $project: {
+                teacher_name: '$name',
+                _id: 0,
+              },
+            },
+          ],
+          as: 'teacherMsg',
+        },
+      },
+      {
+        $replaceRoot: {
+          newRoot: {
+            $mergeObjects: [
+              { $arrayElemAt: [ '$teacherMsg', 0 ] }, // 拿数组的第一位，变成一个object
+              { $arrayElemAt: [ '$student', 0 ] }, // 拿数组的第一位，变成一个object
+              '$$ROOT', // 覆盖数组
+            ],
+          },
+        },
+      },
+      {
+        $unwind: '$openId', // 结构数组
+      },
+      {
+        $match: {
+          $expr: { $ne: [ '$openId', '' ] }, // 去除openid为空的状况
+        },
+      },
+      {
+        $project: {
+          // 只保留openid,和课程id
+          _id: 1,
+          openId: 1,
+          stu_name: 1,
+          name: 1,
+          stu_id: 1,
+          day: 1,
+          time: 1,
+          teacher_name: 1,
+          desc: 1,
+          startTime: 1,
+          endTime: 1,
+        },
+      },
+    ]);
+
+    return data;
+  }
 }
 
 module.exports = ScheduleService;

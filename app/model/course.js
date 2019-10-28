@@ -25,6 +25,10 @@ module.exports = app => {
         type: Number,
         required: true,
       },
+      isNotice: {
+        type: Boolean,
+        default: false,
+      },
       desc: {
         type: String,
         default: null,
