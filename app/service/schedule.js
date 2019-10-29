@@ -252,25 +252,10 @@ class ScheduleService extends Service {
   }
 
 
-  async fetchCurrentNoticeCourse() {
-    // 当天的课程
+  // 获取三个小时个课时后的课程
+  async fetchCurrentNoticeCourseByTime({ startTime, startEndTime }) {
     const { ctx } = this;
-
-
     const time = new Date();
-
-    // 一个半小时之后
-    const HourDate = new Date();
-    HourDate.setHours(HourDate.getHours() + 1);
-    HourDate.setMinutes(HourDate.getMinutes() + 30);
-
-    let hour = HourDate.getHours();
-    hour = String(hour).padStart(2, '0');
-
-    let minutes = HourDate.getMinutes();
-    minutes = String(minutes).padStart(2, '0');
-
-    const startTime = `${hour}:${minutes}`;
 
     const data = await ctx.model.Course.aggregate([
       {
@@ -283,9 +268,9 @@ class ScheduleService extends Service {
           },
           startTime: {
             $gte: startTime,
+            $lt: startEndTime,
           },
           status: 1,
-          isNotice: false,
           day: time.getDay(),
         },
       },
@@ -375,6 +360,19 @@ class ScheduleService extends Service {
 
     return data;
   }
+
+
+  // 重置所有已推送的课程
+  async resetCurrentCourse() {
+    const { ctx } = this;
+    await ctx.model.Course.updateMany({
+    }, {
+      $set: {
+        isNotice: false,
+      },
+    });
+  }
+
 }
 
 module.exports = ScheduleService;
