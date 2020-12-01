@@ -36,7 +36,6 @@ class StudentPackageService extends Service {
           pipeline: [
             {
               $match: {
-                // 接受聚合表达式
                 $expr: { $eq: [ '$_id', '$$stuId' ] },
               },
             },
@@ -51,7 +50,6 @@ class StudentPackageService extends Service {
           pipeline: [
             {
               $match: {
-                // 接受聚合表达式
                 $expr: { $eq: [ '$_id', '$$tId' ] },
               },
             },

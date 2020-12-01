@@ -188,6 +188,8 @@ class StatisticsService extends Service {
    */
   async caculatePackage(body) {
     const { ctx } = this;
+
+    // [{"$unwind":"$studentIds"},{"$group":{"_id":"$studentIds","amount":{"$sum":"$amount"},"count":{"$sum":"$count"},"used":{"$sum":"$used"},"surplus":{"$sum":"$surplus"},"overdueCount":{"$sum":{"$cond":["$beOverdue","$surplus",0]}},"activiteCount":{"$sum":{"$cond":["$isActive","$count",0]}},"unActiviteCount":{"$sum":{"$cond":["$isActive",0,"$count"]}}}}]
     const fields = {
       amount: '$sum',
       count: '$sum',
