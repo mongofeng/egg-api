@@ -71,7 +71,6 @@
   },
   {
     "$project": {
-      "_id": 1,
       "student": {
         "$arrayElemAt": [
           "$student",
@@ -85,6 +84,14 @@
       "overdueCount": 1,
       "activiteCount": 1,
       "unActiviteCount": 1
+    }
+  },
+  {
+    "$group": {
+      "_id": null,
+      "count": {
+        "$sum": 1
+      }
     }
   }
 ]
